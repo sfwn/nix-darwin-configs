@@ -17,6 +17,7 @@
       fzf
       ripgrep
       silver-searcher
+      findutils
     ];
     variables = {
       EDITOR = "vim";
@@ -90,6 +91,7 @@
       bat
       tailscale
       pkg-config
+      libgit2_1_3_0
       colima
       pstree
       rust-analyzer
@@ -152,6 +154,7 @@
           GOPATH = "$HOME/go";
           NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
           PATH = "/run/current-system/sw/bin:$PATH:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin";
+          PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
         };
 
         oh-my-zsh = {
@@ -171,7 +174,7 @@
 
     programs.neovim = {
       enable = true;
-      extraConfig = builtins.readFile ./init.vim;
+      extraConfig = builtins.readFile (./config/nvim/init.vim);
       plugins = with pkgs.vimPlugins;
         let
           context-vim = pkgs.vimUtils.buildVimPlugin {
@@ -202,16 +205,68 @@
           vim-nix
 
           vim-startify
-          #nvim-tree-lua
-          #nvim-web-devicons
+          {
+            plugin = nvim-web-devicons;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-web-devicons.lua);
+          }
           #gitsigns-nvim
-          nerdtree
+          #nerdtree
+          nvim-tree-lua
+          {
+            plugin = nvim-tree-lua;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-tree-lua.lua);
+          }
           fzf-vim
+
+          {
+            plugin = indent-blankline-nvim;
+            type = "lua";
+            config = ''
+              require("indent_blankline").setup {
+                -- for example, context is off by default, use this to turn it on
+                show_current_context = true,
+                show_current_context_start = true,
+                show_current_context_end = true,
+              }
+            '';
+          }
+
+          {
+            plugin = aerial-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/aerial-nvim.lua);
+          }
+          aerial-nvim
+
+          {
+            plugin = plenary-nvim;
+          }
+
+          {
+            plugin = telescope-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/telescope.lua);
+          }
 
           # go
           #vim-go # before coc-go
-          nvim-dap-go
-          nvim-treesitter # depends by nvim-dap-go
+          nvim-dap
+          {
+            plugin = nvim-dap-go;
+            type = "viml";
+            config = ''
+              lua require('dap-go').setup()
+            '';
+          }
+          #nvim-treesitter # depends by nvim-dap-go
+          {
+            plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
+          }
+          #(nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
 
           # coc
           coc-go
@@ -219,10 +274,14 @@
           coc-snippets
           coc-json
           coc-git
+          coc-highlight
           vim-fugitive
 
-          # debug
-          nvim-dap
+          {
+            plugin = lsp_signature-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/lsp_signature-nvim.lua);
+          }
 
           # copilot
           copilot-vim
@@ -230,6 +289,23 @@
           # theme
           papercolor-theme
           dracula-vim
+          palenight-vim
+          aurora
+          {
+            plugin = catppuccin-nvim;
+            type = "lua";
+            config = ''
+              vim.g.catppuccin_flavour = "frappe"; -- latte, frappe, macchiato, mocha
+              require("catppuccin").setup()
+              vim.api.nvim_command "colorscheme catppuccin"
+            '';
+          }
+          {
+            plugin = rose-pine;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/rose-pine.lua);
+          }
+          rose-pine
         ]; # Only loaded if programs.neovim.extraConfig is set
       coc = {
         enable = true;
@@ -264,6 +340,7 @@
       withRuby = true;
     };
 
+    #xdg.configFile."nvim/init.lua".text = builtins.readFile ./config/nvim/lua/init.lua;
 
   };
 }

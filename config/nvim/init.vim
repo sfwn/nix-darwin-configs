@@ -5,19 +5,22 @@ set showmatch
 set termguicolors
 let g:ctrlp_map = '<c-p>'
 set showtabline=2
-colorscheme PaperColor
+"colorscheme PaperColor
+colorscheme dracula
 set background=light
 
 let mapleader = ";"
 
 """ terminal
-nmap <Leader>t :terminal<CR>i
+set splitright
+set splitbelow
+nmap <leader>t :vsplit term://zsh<CR>i
 
 """ git
 nmap <Leader>g :G 
 
 """ nerdtree
-nmap <Leader>1 :NERDTreeToggle<CR>
+nmap <Leader>1 :NvimTreeToggle<CR>
 
 """ go debug
 let g:go_debug_mappings = {
@@ -31,8 +34,9 @@ map <leader>dt :GoDebugStop<cr>
 map <leader>db :GoDebugBreakpoint<cr>
 
 """ fzf
-nnoremap <Leader>o :FZF<CR>
-nnoremap <Leader>f :Rg<CR>
+"nnoremap <Leader>fl :Lines<CR>
+"nnoremap <Leader>ff :Rg<CR>
+"nnoremap <Leader>fo :Files<CR>
 
 """ coc
 " Some servers have issues with backup files, see #649.
@@ -186,3 +190,4 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
