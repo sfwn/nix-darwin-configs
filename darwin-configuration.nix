@@ -18,6 +18,8 @@
       ripgrep
       silver-searcher
       findutils
+      universal-ctags
+      fd
     ];
     variables = {
       EDITOR = "vim";
@@ -81,13 +83,14 @@
     home.packages = with pkgs; [
       httpie
       go_1_19
+      gopls
       rnix-lsp
       htop
       fortune
       gitui
       git
       starship
-      docker
+      docker-client
       bat
       tailscale
       pkg-config
@@ -99,7 +102,7 @@
     ];
 
     programs.emacs = {
-      enable = true;
+      enable = false;
       extraPackages = epkgs: [
         epkgs.nix-mode
         epkgs.magit
@@ -195,13 +198,22 @@
               sha256 = "sha256-N02snYCekDRv5+GB1ilTJuZfxzn5UheQtVFk4wjxjuc=";
             };
           };
+          auto-save-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "auto-save-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "Pocco81";
+              repo = "auto-save.nvim";
+              rev = "2c7a2943340ee2a36c6a61db812418fca1f57866";
+              sha256 = "sha256-keK+IAnHTTA5uFkMivViMMAkYaBvouYqcR+wNPgN3n0=";
+            };
+            buildPhase = "echo build auto-save-nvim"; # cannot be empty string
+          };
         in
         [
           #context-vim
           editorconfig-vim
           #gruvbox-community
-          vim-airline
-          #vim-elixir
+          #vim-elixi
           vim-nix
 
           vim-startify
@@ -249,9 +261,34 @@
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/telescope.lua);
           }
+          telescope-file-browser-nvim
+          telescope-fzf-native-nvim
+
+          # statusline
+          #{
+          #  plugin = feline-nvim;
+          #  type = "lua";
+          #  config = builtins.readFile (./config/nvim/plugins/feline-nvim.lua);
+          #}
+          {
+            plugin = lualine-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/lualine-nvim.lua);
+          }
+          {
+            plugin = lualine-lsp-progress;
+          }
+          #vim-airline
 
           # go
-          #vim-go # before coc-go
+          {
+            plugin = vim-go;
+            type = "viml";
+            config = ''
+              let g:go_gopls_enabled=1
+              let g:go_gopls_options = ['-remote=auto', '-logfile=/tmp/gopls-vim-go.log']
+            '';
+          }
           nvim-dap
           {
             plugin = nvim-dap-go;
@@ -267,6 +304,11 @@
             config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
           }
           #(nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
+          {
+            plugin = nvim-treesitter-context;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-treesitter-context.lua);
+          }
 
           # coc
           coc-go
@@ -278,6 +320,12 @@
           vim-fugitive
 
           {
+            plugin = symbols-outline-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/symbols-outline-nvim.lua);
+          }
+
+          {
             plugin = lsp_signature-nvim;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/lsp_signature-nvim.lua);
@@ -285,6 +333,30 @@
 
           # copilot
           copilot-vim
+          {
+            plugin = copilot-vim;
+            type = "viml";
+            config = ''
+              imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+              let g:copilot_no_tab_map = v:true
+            '';
+          }
+
+          {
+            plugin = nvim-autopairs;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-autopairs.lua);
+          }
+          {
+            plugin = comment-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/comment-nvim.lua);
+          }
+          {
+            plugin = auto-save-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/auto-save-nvim.lua);
+          }
 
           # theme
           papercolor-theme
@@ -309,11 +381,14 @@
         ]; # Only loaded if programs.neovim.extraConfig is set
       coc = {
         enable = true;
+        pluginConfig = builtins.readFile (./config/nvim/plugins/coc.vim);
         settings = {
           "suggest.noselect" = true;
           "suggest.enablePreview" = true;
           "suggest.enablePreselect" = false;
           "suggest.disableKind" = true;
+          "go.goplsArgs" = [ "-remote=auto" "-logfile" "/tmp/gopls-coc-go.log" ];
+          "go.goplsPath" = "${pkgs.gopls}/bin/gopls";
           languageserver = {
             #go = {
             #   command = "gopls";
