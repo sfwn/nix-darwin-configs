@@ -1,6 +1,7 @@
 set mouse=a
 "set relativenumber
 set number
+set relativenumber
 set showmatch
 set termguicolors
 let g:ctrlp_map = '<c-p>'
@@ -9,6 +10,15 @@ set showtabline=2
 colorscheme dracula
 set background=light
 set ignorecase
+"tab
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smarttab
+set softtabstop=2
+set autoindent
+set smartindent
+
 
 let mapleader = ";"
 

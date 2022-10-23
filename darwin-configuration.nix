@@ -208,6 +208,26 @@
             };
             buildPhase = "echo build auto-save-nvim"; # cannot be empty string
           };
+          leap-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "leap-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "ggandor";
+              repo = "leap.nvim";
+              rev = "f20631a18be5ae56d3ec840f48d5a8d8c0ede06e";
+              sha256 = "sha256-s+qXHlchPP8OtXfrcme7qX8rEiUOCp/No9DDcHc7YpE=";
+            };
+            buildPhase = "echo build leap-nvim"; # cannot be empty string
+          };
+          alpha-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "alpha";
+            src = pkgs.fetchFromGitHub {
+              owner = "goolord";
+              repo = "alpha-nvim";
+              rev = "0bb6fc0646bcd1cdb4639737a1cee8d6e08bcc31";
+              sha256 = "sha256-tKXSFZusajLLsbQj6VKZG1TJB+i5i1H5e5Q5tbe+ojM=";
+            };
+            buildPhase = "echo build alpha-nvim"; # cannot be empty string
+          };
         in
         [
           #context-vim
@@ -216,7 +236,12 @@
           #vim-elixi
           vim-nix
 
-          vim-startify
+          # vim-startify
+          {
+            plugin = alpha-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/alpha-nvim.lua);
+          }
           {
             plugin = nvim-web-devicons;
             type = "lua";
@@ -262,7 +287,7 @@
             config = builtins.readFile (./config/nvim/plugins/telescope.lua);
           }
           telescope-file-browser-nvim
-          telescope-fzf-native-nvim
+          telescope-project-nvim
 
           # statusline
           #{
@@ -356,6 +381,16 @@
             plugin = auto-save-nvim;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/auto-save-nvim.lua);
+          }
+          {
+            plugin = leap-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/leap-nvim.lua);
+          }
+          {
+            plugin = vim-repeat;
+            type = "viml";
+            config = builtins.readFile (./config/nvim/plugins/vim-repeat.vim);
           }
 
           # theme
