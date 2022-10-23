@@ -46,3 +46,4 @@ map <leader>db :GoDebugBreakpoint<cr>
 "nnoremap <Leader>ff :Rg<CR>
 "nnoremap <Leader>fo :Files<CR>
 
+vmap <C-c> "+y

@@ -230,6 +230,16 @@
             };
             buildPhase = "echo build alpha-nvim"; # cannot be empty string
           };
+          smart-term-esc-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "smart-term-esc";
+            src = pkgs.fetchFromGitHub {
+              owner = "sychen52";
+              repo = "smart-term-esc.nvim";
+              rev = "168cd1a9e4649038e356b293005e5714e6e9f190";
+              sha256 = "sha256-/jce1Yyp1xfmy66Kv9dD+yJ+KPk+rs8YnO/TaluKv3k=";
+            };
+            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+          };
         in
         [
           #context-vim
@@ -273,6 +283,16 @@
                 show_current_context = true,
                 show_current_context_start = true,
                 show_current_context_end = true,
+              }
+            '';
+          }
+          {
+            plugin = smart-term-esc-nvim;
+            type = "lua";
+            config = ''
+              require('smart-term-esc').setup{
+                 key='<Esc>',
+                 except={'nvim', 'fzf'}
               }
             '';
           }
