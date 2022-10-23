@@ -99,6 +99,8 @@
       pstree
       rust-analyzer
       nodejs-16_x
+      lazygit
+      btop
     ];
 
     programs.emacs = {
@@ -256,6 +258,11 @@
             config = builtins.readFile (./config/nvim/plugins/nvim-tree-lua.lua);
           }
           fzf-vim
+          {
+            plugin = FTerm-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/fterm-nvim.lua);
+          }
 
           {
             plugin = indent-blankline-nvim;
