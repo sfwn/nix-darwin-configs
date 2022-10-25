@@ -14,7 +14,6 @@
       jq
       wget
       curl
-      fzf
       ripgrep
       silver-searcher
       findutils
@@ -100,8 +99,26 @@
       rust-analyzer
       nodejs-16_x
       lazygit
-      btop
+      code-minimap
     ];
+
+    programs.fzf = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
+
+    programs.btop = {
+      enable = true;
+    };
+
+    programs.kitty = {
+      enable = true;
+    };
+
+    programs.wezterm = {
+      enable = true;
+    };
 
     programs.emacs = {
       enable = false;
@@ -132,7 +149,7 @@
         enable = true;
         enableCompletion = true;
         enableAutosuggestions = true;
-        enableSyntaxHighlighting = true;
+        enableSyntaxHighlighting = false;
         dotDir = ".config/zsh";
         initExtra = "
               echo hello world
@@ -290,10 +307,7 @@
             plugin = smart-term-esc-nvim;
             type = "lua";
             config = ''
-              require('smart-term-esc').setup{
-                 key='<Esc>',
-                 except={'nvim', 'fzf'}
-              }
+              require('smart-term-esc').setup{ key='<Esc>', except={'nvim', 'fzf', 'lazygit', 'btop'} }
             '';
           }
 
@@ -315,6 +329,7 @@
           }
           telescope-file-browser-nvim
           telescope-project-nvim
+          telescope-fzf-native-nvim
 
           # statusline
           #{
@@ -331,6 +346,17 @@
             plugin = lualine-lsp-progress;
           }
           #vim-airline
+          minimap-vim
+          {
+            plugin = minimap-vim;
+            type = "viml";
+            config = ''
+              let g:minimap_width = 10
+              let g:minimap_auto_start = 1
+              let g:minimap_auto_start_win_enter = 1
+              let g:minimap_highlight_range = 1
+            '';
+          }
 
           # go
           {
@@ -339,6 +365,7 @@
             config = ''
               let g:go_gopls_enabled=1
               let g:go_gopls_options = ['-remote=auto', '-logfile=/tmp/gopls-vim-go.log']
+              let g:go_imports_autosave = 0 " use coc-go editor.action.organizeImport
             '';
           }
           nvim-dap
@@ -369,7 +396,15 @@
           coc-json
           coc-git
           coc-highlight
-          vim-fugitive
+          {
+            plugin = vim-fugitive;
+            type = "viml";
+            config = ''
+              " for :GBrowse
+              command! -nargs=1 Browse silent execute '!open' shellescape(<q-args>,1)
+            '';
+          }
+          vim-rhubarb
 
           {
             plugin = symbols-outline-nvim;
@@ -451,6 +486,9 @@
           "suggest.disableKind" = true;
           "go.goplsArgs" = [ "-remote=auto" "-logfile" "/tmp/gopls-coc-go.log" ];
           "go.goplsPath" = "${pkgs.gopls}/bin/gopls";
+          "go.goplsOptions" = {
+            "local" = "github.com/erda-project/erda";
+          };
           languageserver = {
             #go = {
             #   command = "gopls";

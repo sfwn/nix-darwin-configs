@@ -151,3 +151,6 @@ nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 nnoremap <silent><nowait> <leader>F :Format<CR>
+
+" go auto order imports
+autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')

@@ -1,7 +1,4 @@
 set mouse=a
-"set relativenumber
-set number
-set relativenumber
 set showmatch
 set termguicolors
 let g:ctrlp_map = '<c-p>'
@@ -10,14 +7,18 @@ set showtabline=2
 colorscheme dracula
 set background=light
 set ignorecase
-"tab
-set tabstop=2
-set shiftwidth=2
-set expandtab
+
+" tab
+set tabstop=4 "Number of spaces that a <Tab> in the file counts for.
+set softtabstop=4
+set shiftwidth=4
+set expandtab "To insert a real tab when 'expandtab' is on, use CTRL-V<Tab>.
 set smarttab
-set softtabstop=2
+" indent
 set autoindent
 set smartindent
+
+set cursorline
 
 
 let mapleader = ";"
