@@ -1,4 +1,6 @@
 set mouse=a
+set number
+set relativenumber
 set showmatch
 set termguicolors
 let g:ctrlp_map = '<c-p>'
