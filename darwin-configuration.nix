@@ -330,6 +330,7 @@
           telescope-file-browser-nvim
           telescope-project-nvim
           telescope-fzf-native-nvim
+          telescope-coc-nvim
 
           # statusline
           #{
@@ -346,7 +347,6 @@
             plugin = lualine-lsp-progress;
           }
           #vim-airline
-          minimap-vim
           {
             plugin = minimap-vim;
             type = "viml";

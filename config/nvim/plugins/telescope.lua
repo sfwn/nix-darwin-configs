@@ -37,6 +37,10 @@ telescope.setup({
         case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                          -- the default case_mode is "smart_case"
     },
+    coc = {
+        theme = "ivy",
+        prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
+    },
   },
 })
 
@@ -47,6 +51,7 @@ telescope.load_extension('project')
 vim.api.nvim_set_keymap( 'n', '<Space>p', ":lua require'telescope'.extensions.project.project{}<CR>", {noremap = true, silent = true})
 -- telescope.extensions.project.project{ display_type = 'full' }
 telescope.load_extension('fzf')
+telescope.load_extension('coc')
 
 local set_keymap = function(lhs, rhs)
   map('n', lhs, rhs, { noremap = true })
