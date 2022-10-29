@@ -30,9 +30,6 @@ set splitright
 set splitbelow
 nmap <leader>t :vsplit term://zsh<CR>i
 
-""" git
-nmap <Leader>g :G 
-
 """ go debug
 let g:go_debug_mappings = {
     \ '(go-debug-continue)': {'key': 'F5', 'arguments': '<nowait>'},
@@ -49,4 +46,14 @@ map <leader>db :GoDebugBreakpoint<cr>
 "nnoremap <Leader>ff :Rg<CR>
 "nnoremap <Leader>fo :Files<CR>
 
+" copy to system clipboard
 vmap <C-c> "+y
+
+" quick exit
+nmap <leader>q :q<CR>
+nmap <leader>g :G<CR>
+
+" quickfix
+nnoremap cn :cnext<CR>
+nnoremap cp :cprev<CR>
+nnoremap co :copen<CR>

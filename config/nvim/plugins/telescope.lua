@@ -8,6 +8,7 @@
 local map = vim.keymap.set
 local telescope = require('telescope')
 local telescope_builtin = require('telescope.builtin')
+local lga_actions = require("telescope-live-grep-args.actions")
 
 vim.cmd([[
   highlight link TelescopePromptCounter TelescopeNormal
@@ -38,8 +39,21 @@ telescope.setup({
                                          -- the default case_mode is "smart_case"
     },
     coc = {
-        theme = "ivy",
+        -- theme = "ivy",
         prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
+    },
+    live_grep_args = {
+      auto_quoting = true, -- enable/disable auto-quoting
+      -- override default mappings
+      -- default_mappings = {},
+      mappings = { -- extend mappings
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt({ postfix = ' -t ' }),
+        },
+      },
+      -- ... also accepts theme settings, for example:
+      -- theme = 'dropdown', -- use dropdown theme
+      -- layout_config = { mirror=true }, -- mirror preview pane
     },
   },
 })
@@ -52,6 +66,7 @@ vim.api.nvim_set_keymap( 'n', '<Space>p', ":lua require'telescope'.extensions.pr
 -- telescope.extensions.project.project{ display_type = 'full' }
 telescope.load_extension('fzf')
 telescope.load_extension('coc')
+telescope.load_extension('live_grep_args')
 
 local set_keymap = function(lhs, rhs)
   map('n', lhs, rhs, { noremap = true })
@@ -61,8 +76,9 @@ end
 set_keymap('<leader>o', telescope_builtin.find_files)
 set_keymap('<leader>b', telescope_builtin.buffers)
 set_keymap('<leader>p', telescope_builtin.commands)
-set_keymap('<leader>g', telescope_builtin.git_status)
-set_keymap('<leader>q', telescope_builtin.quickfix)
+-- set_keymap('<leader>g', telescope_builtin.git_status) " use by fugitive
+-- set_keymap('<leader>q', telescope_builtin.quickfix) " used by :q
 set_keymap('<leader>l', telescope_builtin.loclist)
 set_keymap('<F1>',      telescope_builtin.help_tags)
-set_keymap('<leader>f', telescope_builtin.live_grep)
+-- set_keymap('<leader>f', telescope_builtin.live_grep)
+set_keymap('<leader>f', ':lua require("telescope").extensions.live_grep_args.live_grep_args{}<CR>')

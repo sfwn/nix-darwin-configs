@@ -19,8 +19,15 @@ require("nvim-tree").setup({
     group_empty = true,
   },
   filters = {
-    dotfiles = true,
+    dotfiles = false,
+    custom = {
+            "node_modules", "^\\.git/",
+    },
   },
+  git = {
+        enable = true,
+        ignore = true,
+    },  
   sync_root_with_cwd = true,
   respect_buf_cwd = true,
   update_focused_file = {

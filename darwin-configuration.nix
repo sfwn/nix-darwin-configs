@@ -5,13 +5,13 @@
   # $ nix-env -qaP | grep wget
   environment = {
     systemPackages = with pkgs; [
-      vimHugeX
       hello
       neofetch
       inetutils
       gnumake
       hub
       jq
+      yj
       wget
       curl
       ripgrep
@@ -19,6 +19,9 @@
       findutils
       universal-ctags
       fd
+      kitty # Repeated statement with home-manager.users.sfwn.packages.kitty for Spotlight search, see issue: https://github.com/LnL7/nix-darwin/issues/139
+      silicon
+      alacritty
     ];
     variables = {
       EDITOR = "vim";
@@ -60,6 +63,9 @@
         link = true;
         conflicts_with = [ "etcd" ];
       }
+      {
+        name = "showkey";
+      }
     ];
     casks = [
       #{
@@ -68,10 +74,13 @@
       {
         name = "lulu"; # macOS firewall
       }
+      # {
+      #   name = "kitty"; # home
+      # }
     ];
   };
 
-  home-manager.users.sfwn = { pkgs, ... }: {
+  home-manager.users.sfwn = { config, pkgs, ... }: {
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
@@ -112,8 +121,23 @@
       enable = true;
     };
 
-    programs.kitty = {
+    # programs.kitty = {
+    #   enable = true;
+    #   # settings = builtins.readFile ./config/kitty/kitty.conf;
+    # };
+    home.file.".config/kitty/kitty.conf" = {
+      source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/kitty.conf;
+    };
+    home.file.".config/kitty/current-theme.conf" = {
+      source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/current-theme.conf;
+    };
+
+    programs.alacritty = {
       enable = true;
+      # settings = let importYAML = file: pkgs.lib.importJSON (pkgs.runCommand "alacritty.yml" {} ''
+      #   ${pkgs.yj}/bin/yj -yj < ${file} > $out
+      # ''); in importYAML ./config/alacritty/alacritty.yml;
+      settings = builtins.fromJSON (builtins.readFile ./config/alacritty/alacritty.json);
     };
 
     programs.wezterm = {
@@ -257,6 +281,36 @@
             };
             buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
           };
+          telescope-live-grep-args-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "telescope-live-grep-args-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "nvim-telescope";
+              repo = "telescope-live-grep-args.nvim";
+              rev = "5a30d23a5b2a6c6a24da41cc7e21e4d68d0d1c6e";
+              sha256 = "sha256-DMHauDTEFLY1rh0GpWMCUGwI0TwgsmqKELUClauKc44=";
+            };
+            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+          };
+          silicon-lua = pkgs.vimUtils.buildVimPlugin {
+            name = "silicon-lua";
+            src = pkgs.fetchFromGitHub {
+              owner = "narutoxy";
+              repo = "silicon.lua";
+              rev = "b17444e25f395fd7c7c712b46aa7977cc8433c84";
+              sha256 = "sha256-nFcCeXWHO6+YXfuUUXuxgjBHyYaPO0myj0fkeqyxPFA=";
+            };
+            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+          };
+          beacon-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "beacon-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "DanilaMihailov";
+              repo = "beacon.nvim";
+              rev = "a786c9a89b2c739c69f9500a2f70f2586c06ec27";
+              sha256 = "sha256-qD0dwccNjhJ7xyM+yG8bSFUyPn7hHZyC0RBy3MW1hz0=";
+            };
+            buildPhase = "echo build beacon.nvim"; # cannot be empty string
+          };
         in
         [
           #context-vim
@@ -264,6 +318,13 @@
           #gruvbox-community
           #vim-elixi
           vim-nix
+          beacon-nvim
+
+          {
+            plugin = silicon-lua;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/silicon.lua);
+          }
 
           # vim-startify
           {
@@ -331,6 +392,7 @@
           telescope-project-nvim
           telescope-fzf-native-nvim
           telescope-coc-nvim
+          telescope-live-grep-args-nvim
 
           # statusline
           #{
@@ -352,8 +414,8 @@
             type = "viml";
             config = ''
               let g:minimap_width = 10
-              let g:minimap_auto_start = 1
-              let g:minimap_auto_start_win_enter = 1
+              let g:minimap_auto_start = 0
+              let g:minimap_auto_start_win_enter = 0
               let g:minimap_highlight_range = 1
             '';
           }
@@ -366,6 +428,8 @@
               let g:go_gopls_enabled=1
               let g:go_gopls_options = ['-remote=auto', '-logfile=/tmp/gopls-vim-go.log']
               let g:go_imports_autosave = 0 " use coc-go editor.action.organizeImport
+              command! GoTestMonkey let $GOARCH="amd64" | :GoTest
+              command! GoTestFuncMonkey let $GOARCH="amd64" | :GoTestFunc
             '';
           }
           nvim-dap
@@ -399,10 +463,7 @@
           {
             plugin = vim-fugitive;
             type = "viml";
-            config = ''
-              " for :GBrowse
-              command! -nargs=1 Browse silent execute '!open' shellescape(<q-args>,1)
-            '';
+            config = builtins.readFile (./config/nvim/plugins/vim-fugitive.vim);
           }
           vim-rhubarb
 
@@ -459,6 +520,11 @@
           papercolor-theme
           dracula-vim
           palenight-vim
+          {
+            plugin = nvim-colorizer-lua;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-colorizer-lua.lua);
+          }
           aurora
           {
             plugin = catppuccin-nvim;

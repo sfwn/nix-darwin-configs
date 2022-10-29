@@ -1,0 +1,13 @@
+key_bindings:
+  - { key: I, mods: Alt, chars: "\x1bi" }
+  - { key: G, mods: Alt, chars: "\x1bg" }
+  - { key: B, mods: Alt, chars: "\x1bb" }
+  - { key: F, mods: Alt, chars: "\x1bf" }
+  - { key: LBracket, mods: Alt, chars: "\x1b[" }
+  - { key: RBracket, mods: Alt, chars: "\x1b]" }
+  - { key: N,         mods: Alt,           command: { program: "alacritty", args: [] }}
+font:
+  normal:
+    family: JetBrainsMono Nerd Font Mono
+  size: 16
+alt_send_esc: false
