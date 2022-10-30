@@ -82,6 +82,12 @@
 
   home-manager.users.sfwn = { config, pkgs, ... }: {
 
+    nixpkgs.overlays = [
+      (import (builtins.fetchTarball {
+        url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+       }))
+    ];
+
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
     programs.bash.enable = true;
@@ -220,6 +226,7 @@
 
     programs.neovim = {
       enable = true;
+      package = pkgs.neovim-nightly;
       extraConfig = builtins.readFile (./config/nvim/init.vim);
       plugins = with pkgs.vimPlugins;
         let
