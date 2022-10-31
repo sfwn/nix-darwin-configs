@@ -15,8 +15,26 @@ vim.cmd([[
   highlight link TelescopeSelection TelescopePromptPrefix
 ]])
 
+local previewers = require("telescope.previewers")
+
+local new_maker = function(filepath, bufnr, opts)
+  opts = opts or {}
+
+  filepath = vim.fn.expand(filepath)
+  vim.loop.fs_stat(filepath, function(_, stat)
+    if not stat then return end
+    if stat.size > 100000 then
+      return
+    else
+      previewers.buffer_previewer_maker(filepath, bufnr, opts)
+    end
+  end)
+end
 
 telescope.setup({
+  defaults = {
+    buffer_previewer_maker = new_maker,
+  },
   extensions = {
   	file_browser = {
   		theme = "ivy",
@@ -78,7 +96,7 @@ set_keymap('<leader>b', telescope_builtin.buffers)
 set_keymap('<leader>p', telescope_builtin.commands)
 -- set_keymap('<leader>g', telescope_builtin.git_status) " use by fugitive
 -- set_keymap('<leader>q', telescope_builtin.quickfix) " used by :q
-set_keymap('<leader>l', telescope_builtin.loclist)
+set_keymap('<leader>l', telescope_builtin.current_buffer_fuzzy_find)
 set_keymap('<F1>',      telescope_builtin.help_tags)
 -- set_keymap('<leader>f', telescope_builtin.live_grep)
 set_keymap('<leader>f', ':lua require("telescope").extensions.live_grep_args.live_grep_args{}<CR>')

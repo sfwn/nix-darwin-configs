@@ -4,7 +4,7 @@ set relativenumber
 set showmatch
 set termguicolors
 let g:ctrlp_map = '<c-p>'
-set showtabline=2
+"set showtabline=2
 "colorscheme PaperColor
 colorscheme dracula
 set background=light
@@ -57,3 +57,13 @@ nmap <leader>g :G<CR>
 nnoremap cn :cnext<CR>
 nnoremap cp :cprev<CR>
 nnoremap co :copen<CR>
+
+" complete
+" set completeopt=menu,menuone,noselect
+set completeopt=menu,menuone
+
+" from coc
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=yes

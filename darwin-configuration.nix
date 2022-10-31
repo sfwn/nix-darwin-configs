@@ -22,6 +22,7 @@
       kitty # Repeated statement with home-manager.users.sfwn.packages.kitty for Spotlight search, see issue: https://github.com/LnL7/nix-darwin/issues/139
       silicon
       alacritty
+      kubectl
     ];
     variables = {
       EDITOR = "vim";
@@ -112,6 +113,7 @@
       colima
       pstree
       rust-analyzer
+      cargo
       nodejs-16_x
       lazygit
       code-minimap
@@ -306,7 +308,7 @@
               rev = "b17444e25f395fd7c7c712b46aa7977cc8433c84";
               sha256 = "sha256-nFcCeXWHO6+YXfuUUXuxgjBHyYaPO0myj0fkeqyxPFA=";
             };
-            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+            buildPhase = "echo build smart-term-esc.nvim";
           };
           beacon-nvim = pkgs.vimUtils.buildVimPlugin {
             name = "beacon-nvim";
@@ -316,22 +318,111 @@
               rev = "a786c9a89b2c739c69f9500a2f70f2586c06ec27";
               sha256 = "sha256-qD0dwccNjhJ7xyM+yG8bSFUyPn7hHZyC0RBy3MW1hz0=";
             };
-            buildPhase = "echo build beacon.nvim"; # cannot be empty string
+            buildPhase = "echo build beacon.nvim";
+          };
+          noice-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "noice-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "folke";
+              repo = "noice.nvim";
+              rev = "7b62ccfc236e51e78e5b2fc7d3068eacd65e4590";
+              sha256 = "sha256-YLvsu1A0pjIXA7Fq/MVwot5eykZbrdaKh85szVAEXpQ=";
+            };
+            buildPhase = "echo build noice.nvim";
+          };
+          cmp-nvim-lsp = pkgs.vimUtils.buildVimPlugin {
+            name = "cmp-nvim-lsp";
+            src = pkgs.fetchFromGitHub {
+              owner = "hrsh7th";
+              repo = "cmp-nvim-lsp";
+              rev = "78924d1d677b29b3d1fe429864185341724ee5a2";
+              sha256 = "sha256-amY87Q2HQseMoEFJW8YFf6k5UUWru52498EoDs4m9r8=";
+            };
+            buildPhase = "echo build cmp-nvim-lsp";
+          };
+          nvim-navic = pkgs.vimUtils.buildVimPlugin {
+            name = "nvim-navic";
+            src = pkgs.fetchFromGitHub {
+              owner = "SmiteshP";
+              repo = "nvim-navic";
+              rev = "eebc4f15132c587c52fcd2ce2f0da78fc19a16c0";
+              sha256 = "sha256-uJKEzOhkWTN0TRheejFkmbQYxd1KA1fCYMyDlA2Hmt8=";
+            };
+            buildPhase = "echo build nvim-navic";
+          };
+          mason-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "mason-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "williamboman";
+              repo = "mason.nvim";
+              rev = "311a14ffd7aa62561b73405c63478756c265585c";
+              sha256 = "sha256-lieBUJ7LF9vSV75K9L6Gsa/BZmdxXwqpCZI7zJz/XTY=";
+            };
+            buildPhase = "echo build mason-nvim";
+          };
+          cmp-nvim-lsp-signature-help = pkgs.vimUtils.buildVimPlugin {
+            name = "cmp-nvim-lsp-signature-help";
+            src = pkgs.fetchFromGitHub {
+              owner = "hrsh7th";
+              repo = "cmp-nvim-lsp-signature-help";
+              rev = "d2768cb1b83de649d57d967085fe73c5e01f8fd7";
+              sha256 = "sha256-QISg2HRSXG7tlO1EI4J7lvh/gmyVii4+QUBzD3ZjNY4=";
+            };
+            buildPhase = "echo build cmp-nvim-lsp-signature-help";
+          };
+          which-key-nvim = pkgs.vimUtils.buildVimPlugin {
+            name = "which-key-nvim";
+            src = pkgs.fetchFromGitHub {
+              owner = "folke";
+              repo = "which-key.nvim";
+              rev = "61553aeb3d5ca8c11eea8be6eadf478062982ac9";
+              sha256 = "sha256-IbJP6j+M+POPhX4YbewTJiSoELvDo6y+vF0RREqqm4c=";
+            };
+            buildPhase = "echo build which-key.nvim";
           };
         in
         [
+          which-key-nvim
           #context-vim
           editorconfig-vim
           #gruvbox-community
           #vim-elixi
           vim-nix
           beacon-nvim
-
           {
             plugin = silicon-lua;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/silicon.lua);
           }
+          {
+            plugin = nvim-navic;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
+          }
+
+          {
+            plugin = nvim-notify;
+            type = "lua";
+            config = ''
+            '';
+          }
+          {
+            plugin = nui-nvim;
+            type = "lua";
+            config = ''
+            '';
+          }
+          {
+            plugin = noice-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/noice.lua);
+          }
+          {
+            plugin = nvim-navic;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
+          }
+
 
           # vim-startify
           {
@@ -401,72 +492,44 @@
           telescope-coc-nvim
           telescope-live-grep-args-nvim
 
-          # statusline
-          #{
-          #  plugin = feline-nvim;
-          #  type = "lua";
-          #  config = builtins.readFile (./config/nvim/plugins/feline-nvim.lua);
-          #}
           {
             plugin = lualine-nvim;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/lualine-nvim.lua);
           }
-          {
-            plugin = lualine-lsp-progress;
-          }
-          #vim-airline
-          {
-            plugin = minimap-vim;
-            type = "viml";
-            config = ''
-              let g:minimap_width = 10
-              let g:minimap_auto_start = 0
-              let g:minimap_auto_start_win_enter = 0
-              let g:minimap_highlight_range = 1
-            '';
-          }
 
-          # go
-          {
-            plugin = vim-go;
-            type = "viml";
-            config = ''
-              let g:go_gopls_enabled=1
-              let g:go_gopls_options = ['-remote=auto', '-logfile=/tmp/gopls-vim-go.log']
-              let g:go_imports_autosave = 0 " use coc-go editor.action.organizeImport
-              command! GoTestMonkey let $GOARCH="amd64" | :GoTest
-              command! GoTestFuncMonkey let $GOARCH="amd64" | :GoTestFunc
-            '';
-          }
-          nvim-dap
-          {
-            plugin = nvim-dap-go;
-            type = "viml";
-            config = ''
-              lua require('dap-go').setup()
-            '';
-          }
-          #nvim-treesitter # depends by nvim-dap-go
           {
             plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
           }
-          #(nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
           {
             plugin = nvim-treesitter-context;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/nvim-treesitter-context.lua);
           }
 
-          # coc
-          coc-go
-          coc-rust-analyzer
-          coc-snippets
-          coc-json
-          coc-git
-          coc-highlight
+          # cmp
+          {
+            plugin = nvim-cmp;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-cmp.lua);
+          }
+          # cmp sources
+          cmp-nvim-lsp
+          cmp-buffer
+          cmp-path
+          cmp-cmdline
+          # cmp-vsnip
+          # vim-vsnip # depends by cmp-vsnip
+          cmp-emoji
+          # snippets
+          cmp_luasnip
+          luasnip # depends by cmp_luasnip
+          friendly-snippets
+          lspkind-nvim
+          cmp-nvim-lsp-signature-help
+
           {
             plugin = vim-fugitive;
             type = "viml";
@@ -484,6 +547,18 @@
             plugin = lsp_signature-nvim;
             type = "lua";
             config = builtins.readFile (./config/nvim/plugins/lsp_signature-nvim.lua);
+          }
+
+          # lsp
+          {
+            plugin = nvim-lspconfig;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/nvim-lspconfig.lua);
+          }
+          {
+            plugin = mason-nvim;
+            type = "lua";
+            config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
           }
 
           # copilot
@@ -550,7 +625,7 @@
           rose-pine
         ]; # Only loaded if programs.neovim.extraConfig is set
       coc = {
-        enable = true;
+        enable = false;
         pluginConfig = builtins.readFile (./config/nvim/plugins/coc.vim);
         settings = {
           "suggest.noselect" = true;
