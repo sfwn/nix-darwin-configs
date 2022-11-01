@@ -1,4 +1,6 @@
 local navic = require("nvim-navic")
+local mason = require("mason")
+local mason_registry = require("mason-registry")
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -61,4 +63,41 @@ require('lspconfig')['rust_analyzer'].setup{
 require'lspconfig'.bashls.setup{
     on_attach = on_attach,
     flags = lsp_flags,
+}
+require'lspconfig'.rnix.setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+
+local lua_pkg = mason_registry.get_package("lua-language-server")
+-- local sumneko_root_path = "/Users/sfwn/.local/share/nvim/mason/packages/lua-language-server/extension/server"
+-- concat string
+local sumneko_root_path = table.concat({lua_pkg:get_install_path(), "/extension/server"}, "/")
+local sumneko_binary = table.concat({lua_pkg:get_install_path(), "/extension/server/bin/lua-language-server"}, "/")
+require'lspconfig'['sumneko_lua'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = vim.split(package.path, ';'),
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {'vim'},
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = {
+                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                },
+            },
+        },
+    },
 }

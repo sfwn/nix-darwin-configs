@@ -1,5 +1,11 @@
 { config, pkgs, ... }:
-
+let
+  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {
+    config = {
+      allowUnfree = true;
+    };
+  };
+in
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -23,6 +29,8 @@
       silicon
       alacritty
       kubectl
+      jump
+      starship
     ];
     variables = {
       EDITOR = "vim";
@@ -69,121 +77,120 @@
       }
     ];
     casks = [
-      #{
-      #  name = "docker";
-      #}
-      {
-        name = "lulu"; # macOS firewall
-      }
-      # {
-      #   name = "kitty"; # home
-      # }
     ];
   };
 
-  home-manager.users.sfwn = { config, pkgs, ... }: {
-
-    nixpkgs.overlays = [
-      (import (builtins.fetchTarball {
-        url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-       }))
-    ];
-
-    # Let Home Manager install and manage itself.
-    programs.home-manager.enable = true;
-    programs.bash.enable = true;
-
-    home.stateVersion = "22.05";
-
-    home.packages = with pkgs; [
-      httpie
-      go_1_19
-      gopls
-      rnix-lsp
-      htop
-      fortune
-      gitui
-      git
-      starship
-      docker-client
-      bat
-      tailscale
-      pkg-config
-      libgit2_1_3_0
-      colima
-      pstree
-      rust-analyzer
-      cargo
-      nodejs-16_x
-      lazygit
-      code-minimap
-    ];
-
-    programs.fzf = {
-      enable = true;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-    };
-
-    programs.btop = {
-      enable = true;
-    };
-
-    # programs.kitty = {
-    #   enable = true;
-    #   # settings = builtins.readFile ./config/kitty/kitty.conf;
-    # };
-    home.file.".config/kitty/kitty.conf" = {
-      source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/kitty.conf;
-    };
-    home.file.".config/kitty/current-theme.conf" = {
-      source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/current-theme.conf;
-    };
-
-    programs.alacritty = {
-      enable = true;
-      # settings = let importYAML = file: pkgs.lib.importJSON (pkgs.runCommand "alacritty.yml" {} ''
-      #   ${pkgs.yj}/bin/yj -yj < ${file} > $out
-      # ''); in importYAML ./config/alacritty/alacritty.yml;
-      settings = builtins.fromJSON (builtins.readFile ./config/alacritty/alacritty.json);
-    };
-
-    programs.wezterm = {
-      enable = true;
-    };
-
-    programs.emacs = {
-      enable = false;
-      extraPackages = epkgs: [
-        epkgs.nix-mode
-        epkgs.magit
-      ];
-    };
-
-    programs.git = {
-      enable = true;
-      userEmail = "sfwnlin@gmail.com";
-      userName = "sfwn";
-      aliases = {
-        st = "status";
-        co = "checkout";
-        df = "diff";
-        dfs = "diff --staged";
+  home-manager.users.sfwn = { config, pkgs, ... }:
+    let
+      unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {
+        config = {
+          allowUnfree = true;
+        };
       };
-    };
+    in
+    {
 
-    programs.gitui = {
-      enable = true;
-    };
+      nixpkgs.overlays = [
+        (import (builtins.fetchTarball {
+          url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+        }))
+      ];
 
-    programs = {
-      zsh = rec {
+      # Let Home Manager install and manage itself.
+      programs.home-manager.enable = true;
+      programs.bash.enable = true;
+
+      home.stateVersion = "22.05";
+
+      home.packages = with pkgs; [
+        httpie
+        go_1_19
+        gopls
+        rnix-lsp
+        htop
+        fortune
+        gitui
+        git
+        starship
+        docker-client
+        bat
+        tailscale
+        pkg-config
+        libgit2_1_3_0
+        colima
+        pstree
+        rust-analyzer
+        cargo
+        nodejs-16_x
+        lazygit
+        code-minimap
+      ];
+
+      programs.fzf = {
         enable = true;
-        enableCompletion = true;
-        enableAutosuggestions = true;
-        enableSyntaxHighlighting = false;
-        dotDir = ".config/zsh";
-        initExtra = "
+        enableBashIntegration = true;
+        enableZshIntegration = true;
+      };
+
+      programs.btop = {
+        enable = true;
+      };
+
+      # programs.kitty = {
+      #   enable = true;
+      #   # settings = builtins.readFile ./config/kitty/kitty.conf;
+      # };
+      home.file.".config/kitty/kitty.conf" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/kitty.conf;
+      };
+      home.file.".config/kitty/current-theme.conf" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./config/kitty/current-theme.conf;
+      };
+
+      programs.alacritty = {
+        enable = true;
+        # settings = let importYAML = file: pkgs.lib.importJSON (pkgs.runCommand "alacritty.yml" {} ''
+        #   ${pkgs.yj}/bin/yj -yj < ${file} > $out
+        # ''); in importYAML ./config/alacritty/alacritty.yml;
+        settings = builtins.fromJSON (builtins.readFile ./config/alacritty/alacritty.json);
+      };
+
+      programs.wezterm = {
+        enable = true;
+      };
+
+      programs.emacs = {
+        enable = false;
+        extraPackages = epkgs: [
+          epkgs.nix-mode
+          epkgs.magit
+        ];
+      };
+
+      programs.git = {
+        enable = true;
+        userEmail = "sfwnlin@gmail.com";
+        userName = "sfwn";
+        aliases = {
+          st = "status";
+          co = "checkout";
+          df = "diff";
+          dfs = "diff --staged";
+        };
+      };
+
+      programs.gitui = {
+        enable = true;
+      };
+
+      programs = {
+        zsh = rec {
+          enable = true;
+          enableCompletion = true;
+          enableAutosuggestions = true;
+          enableSyntaxHighlighting = false;
+          dotDir = ".config/zsh";
+          initExtra = "
               echo hello world
               echo hello nix
               eval \"$(jump shell)\"
@@ -191,481 +198,380 @@
               eval \"$(brew shellenv)\"
             ";
 
-        history = {
-          path = "$HOME/${dotDir}/history";
-          size = 50000;
-          save = 500000;
-          ignoreDups = true;
-          share = true;
-          extended = true;
-        };
-
-        sessionVariables = rec {
-          LANG = "en_US.UTF-8";
-          EDITOR = "vim";
-          VISUAL = EDITOR;
-          GIT_EDITOR = EDITOR;
-          GOPATH = "$HOME/go";
-          NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
-          PATH = "/run/current-system/sw/bin:$PATH:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin";
-          PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
-        };
-
-        oh-my-zsh = {
-          enable = true;
-          theme = "robbyrussell";
-          plugins = [ "git" ];
-        };
-
-        shellAliases = {
-          ls = "${pkgs.coreutils}/bin/ls --color=auto";
-          la = "${pkgs.coreutils}/bin/ls -a --color=auto";
-          ll = "${pkgs.coreutils}/bin/ls -l -a --color=auto";
-          ds = "darwin-rebuild switch";
-        };
-      };
-    };
-
-    programs.neovim = {
-      enable = true;
-      package = pkgs.neovim-nightly;
-      extraConfig = builtins.readFile (./config/nvim/init.vim);
-      plugins = with pkgs.vimPlugins;
-        let
-          context-vim = pkgs.vimUtils.buildVimPlugin {
-            name = "context-vim";
-            src = pkgs.fetchFromGitHub {
-              owner = "wellle";
-              repo = "context.vim";
-              rev = "e38496f1eb5bb52b1022e5c1f694e9be61c3714c";
-              sha256 = "1iy614py9qz4rwk9p4pr1ci0m1lvxil0xiv3ymqzhqrw5l55n346";
-            };
+          history = {
+            path = "$HOME/${dotDir}/history";
+            size = 50000;
+            save = 500000;
+            ignoreDups = true;
+            share = true;
+            extended = true;
           };
-          nvim-dap-go = pkgs.vimUtils.buildVimPlugin {
-            name = "nvim-dap-go";
-            src = pkgs.fetchFromGitHub {
-              owner = "leoluz";
-              repo = "nvim-dap-go";
-              rev = "c2902bb96c45e872d947d7e174775e652439add4";
-              sha256 = "sha256-N02snYCekDRv5+GB1ilTJuZfxzn5UheQtVFk4wjxjuc=";
-            };
+
+          sessionVariables = rec {
+            LANG = "en_US.UTF-8";
+            EDITOR = "vim";
+            VISUAL = EDITOR;
+            GIT_EDITOR = EDITOR;
+            GOPATH = "$HOME/go";
+            NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
+            PATH = "/run/current-system/sw/bin:$PATH:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin";
+            PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
           };
-          auto-save-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "auto-save-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "Pocco81";
-              repo = "auto-save.nvim";
-              rev = "2c7a2943340ee2a36c6a61db812418fca1f57866";
-              sha256 = "sha256-keK+IAnHTTA5uFkMivViMMAkYaBvouYqcR+wNPgN3n0=";
-            };
-            buildPhase = "echo build auto-save-nvim"; # cannot be empty string
+
+          oh-my-zsh = {
+            enable = true;
+            theme = "robbyrussell";
+            plugins = [ "git" ];
           };
-          leap-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "leap-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "ggandor";
-              repo = "leap.nvim";
-              rev = "f20631a18be5ae56d3ec840f48d5a8d8c0ede06e";
-              sha256 = "sha256-s+qXHlchPP8OtXfrcme7qX8rEiUOCp/No9DDcHc7YpE=";
-            };
-            buildPhase = "echo build leap-nvim"; # cannot be empty string
-          };
-          alpha-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "alpha";
-            src = pkgs.fetchFromGitHub {
-              owner = "goolord";
-              repo = "alpha-nvim";
-              rev = "0bb6fc0646bcd1cdb4639737a1cee8d6e08bcc31";
-              sha256 = "sha256-tKXSFZusajLLsbQj6VKZG1TJB+i5i1H5e5Q5tbe+ojM=";
-            };
-            buildPhase = "echo build alpha-nvim"; # cannot be empty string
-          };
-          smart-term-esc-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "smart-term-esc";
-            src = pkgs.fetchFromGitHub {
-              owner = "sychen52";
-              repo = "smart-term-esc.nvim";
-              rev = "168cd1a9e4649038e356b293005e5714e6e9f190";
-              sha256 = "sha256-/jce1Yyp1xfmy66Kv9dD+yJ+KPk+rs8YnO/TaluKv3k=";
-            };
-            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
-          };
-          telescope-live-grep-args-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "telescope-live-grep-args-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "nvim-telescope";
-              repo = "telescope-live-grep-args.nvim";
-              rev = "5a30d23a5b2a6c6a24da41cc7e21e4d68d0d1c6e";
-              sha256 = "sha256-DMHauDTEFLY1rh0GpWMCUGwI0TwgsmqKELUClauKc44=";
-            };
-            buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
-          };
-          silicon-lua = pkgs.vimUtils.buildVimPlugin {
-            name = "silicon-lua";
-            src = pkgs.fetchFromGitHub {
-              owner = "narutoxy";
-              repo = "silicon.lua";
-              rev = "b17444e25f395fd7c7c712b46aa7977cc8433c84";
-              sha256 = "sha256-nFcCeXWHO6+YXfuUUXuxgjBHyYaPO0myj0fkeqyxPFA=";
-            };
-            buildPhase = "echo build smart-term-esc.nvim";
-          };
-          beacon-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "beacon-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "DanilaMihailov";
-              repo = "beacon.nvim";
-              rev = "a786c9a89b2c739c69f9500a2f70f2586c06ec27";
-              sha256 = "sha256-qD0dwccNjhJ7xyM+yG8bSFUyPn7hHZyC0RBy3MW1hz0=";
-            };
-            buildPhase = "echo build beacon.nvim";
-          };
-          noice-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "noice-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "folke";
-              repo = "noice.nvim";
-              rev = "7b62ccfc236e51e78e5b2fc7d3068eacd65e4590";
-              sha256 = "sha256-YLvsu1A0pjIXA7Fq/MVwot5eykZbrdaKh85szVAEXpQ=";
-            };
-            buildPhase = "echo build noice.nvim";
-          };
-          cmp-nvim-lsp = pkgs.vimUtils.buildVimPlugin {
-            name = "cmp-nvim-lsp";
-            src = pkgs.fetchFromGitHub {
-              owner = "hrsh7th";
-              repo = "cmp-nvim-lsp";
-              rev = "78924d1d677b29b3d1fe429864185341724ee5a2";
-              sha256 = "sha256-amY87Q2HQseMoEFJW8YFf6k5UUWru52498EoDs4m9r8=";
-            };
-            buildPhase = "echo build cmp-nvim-lsp";
-          };
-          nvim-navic = pkgs.vimUtils.buildVimPlugin {
-            name = "nvim-navic";
-            src = pkgs.fetchFromGitHub {
-              owner = "SmiteshP";
-              repo = "nvim-navic";
-              rev = "eebc4f15132c587c52fcd2ce2f0da78fc19a16c0";
-              sha256 = "sha256-uJKEzOhkWTN0TRheejFkmbQYxd1KA1fCYMyDlA2Hmt8=";
-            };
-            buildPhase = "echo build nvim-navic";
-          };
-          mason-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "mason-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "williamboman";
-              repo = "mason.nvim";
-              rev = "311a14ffd7aa62561b73405c63478756c265585c";
-              sha256 = "sha256-lieBUJ7LF9vSV75K9L6Gsa/BZmdxXwqpCZI7zJz/XTY=";
-            };
-            buildPhase = "echo build mason-nvim";
-          };
-          cmp-nvim-lsp-signature-help = pkgs.vimUtils.buildVimPlugin {
-            name = "cmp-nvim-lsp-signature-help";
-            src = pkgs.fetchFromGitHub {
-              owner = "hrsh7th";
-              repo = "cmp-nvim-lsp-signature-help";
-              rev = "d2768cb1b83de649d57d967085fe73c5e01f8fd7";
-              sha256 = "sha256-QISg2HRSXG7tlO1EI4J7lvh/gmyVii4+QUBzD3ZjNY4=";
-            };
-            buildPhase = "echo build cmp-nvim-lsp-signature-help";
-          };
-          which-key-nvim = pkgs.vimUtils.buildVimPlugin {
-            name = "which-key-nvim";
-            src = pkgs.fetchFromGitHub {
-              owner = "folke";
-              repo = "which-key.nvim";
-              rev = "61553aeb3d5ca8c11eea8be6eadf478062982ac9";
-              sha256 = "sha256-IbJP6j+M+POPhX4YbewTJiSoELvDo6y+vF0RREqqm4c=";
-            };
-            buildPhase = "echo build which-key.nvim";
-          };
-        in
-        [
-          which-key-nvim
-          #context-vim
-          editorconfig-vim
-          #gruvbox-community
-          #vim-elixi
-          vim-nix
-          beacon-nvim
-          {
-            plugin = silicon-lua;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/silicon.lua);
-          }
-          {
-            plugin = nvim-navic;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
-          }
 
-          {
-            plugin = nvim-notify;
-            type = "lua";
-            config = ''
-            '';
-          }
-          {
-            plugin = nui-nvim;
-            type = "lua";
-            config = ''
-            '';
-          }
-          {
-            plugin = noice-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/noice.lua);
-          }
-          {
-            plugin = nvim-navic;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
-          }
-
-
-          # vim-startify
-          {
-            plugin = alpha-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/alpha-nvim.lua);
-          }
-          {
-            plugin = nvim-web-devicons;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-web-devicons.lua);
-          }
-          #gitsigns-nvim
-          #nerdtree
-          nvim-tree-lua
-          {
-            plugin = nvim-tree-lua;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-tree-lua.lua);
-          }
-          fzf-vim
-          {
-            plugin = FTerm-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/fterm-nvim.lua);
-          }
-
-          {
-            plugin = indent-blankline-nvim;
-            type = "lua";
-            config = ''
-              require("indent_blankline").setup {
-                -- for example, context is off by default, use this to turn it on
-                show_current_context = true,
-                show_current_context_start = true,
-                show_current_context_end = true,
-              }
-            '';
-          }
-          {
-            plugin = smart-term-esc-nvim;
-            type = "lua";
-            config = ''
-              require('smart-term-esc').setup{ key='<Esc>', except={'nvim', 'fzf', 'lazygit', 'btop'} }
-            '';
-          }
-
-          {
-            plugin = aerial-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/aerial-nvim.lua);
-          }
-          aerial-nvim
-
-          {
-            plugin = plenary-nvim;
-          }
-
-          {
-            plugin = telescope-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/telescope.lua);
-          }
-          telescope-file-browser-nvim
-          telescope-project-nvim
-          telescope-fzf-native-nvim
-          telescope-coc-nvim
-          telescope-live-grep-args-nvim
-
-          {
-            plugin = lualine-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/lualine-nvim.lua);
-          }
-
-          {
-            plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
-          }
-          {
-            plugin = nvim-treesitter-context;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-treesitter-context.lua);
-          }
-
-          # cmp
-          {
-            plugin = nvim-cmp;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-cmp.lua);
-          }
-          # cmp sources
-          cmp-nvim-lsp
-          cmp-buffer
-          cmp-path
-          cmp-cmdline
-          # cmp-vsnip
-          # vim-vsnip # depends by cmp-vsnip
-          cmp-emoji
-          # snippets
-          cmp_luasnip
-          luasnip # depends by cmp_luasnip
-          friendly-snippets
-          lspkind-nvim
-          cmp-nvim-lsp-signature-help
-
-          {
-            plugin = vim-fugitive;
-            type = "viml";
-            config = builtins.readFile (./config/nvim/plugins/vim-fugitive.vim);
-          }
-          vim-rhubarb
-
-          {
-            plugin = symbols-outline-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/symbols-outline-nvim.lua);
-          }
-
-          {
-            plugin = lsp_signature-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/lsp_signature-nvim.lua);
-          }
-
-          # lsp
-          {
-            plugin = nvim-lspconfig;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-lspconfig.lua);
-          }
-          {
-            plugin = mason-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
-          }
-
-          # copilot
-          copilot-vim
-          {
-            plugin = copilot-vim;
-            type = "viml";
-            config = ''
-              imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
-              let g:copilot_no_tab_map = v:true
-            '';
-          }
-
-          {
-            plugin = nvim-autopairs;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-autopairs.lua);
-          }
-          {
-            plugin = comment-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/comment-nvim.lua);
-          }
-          {
-            plugin = auto-save-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/auto-save-nvim.lua);
-          }
-          {
-            plugin = leap-nvim;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/leap-nvim.lua);
-          }
-          {
-            plugin = vim-repeat;
-            type = "viml";
-            config = builtins.readFile (./config/nvim/plugins/vim-repeat.vim);
-          }
-
-          # theme
-          papercolor-theme
-          dracula-vim
-          palenight-vim
-          {
-            plugin = nvim-colorizer-lua;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/nvim-colorizer-lua.lua);
-          }
-          aurora
-          {
-            plugin = catppuccin-nvim;
-            type = "lua";
-            config = ''
-              vim.g.catppuccin_flavour = "frappe"; -- latte, frappe, macchiato, mocha
-              require("catppuccin").setup()
-              vim.api.nvim_command "colorscheme catppuccin"
-            '';
-          }
-          {
-            plugin = rose-pine;
-            type = "lua";
-            config = builtins.readFile (./config/nvim/plugins/rose-pine.lua);
-          }
-          rose-pine
-        ]; # Only loaded if programs.neovim.extraConfig is set
-      coc = {
-        enable = false;
-        pluginConfig = builtins.readFile (./config/nvim/plugins/coc.vim);
-        settings = {
-          "suggest.noselect" = true;
-          "suggest.enablePreview" = true;
-          "suggest.enablePreselect" = false;
-          "suggest.disableKind" = true;
-          "go.goplsArgs" = [ "-remote=auto" "-logfile" "/tmp/gopls-coc-go.log" ];
-          "go.goplsPath" = "${pkgs.gopls}/bin/gopls";
-          "go.goplsOptions" = {
-            "local" = "github.com/erda-project/erda";
-          };
-          languageserver = {
-            #go = {
-            #   command = "gopls";
-            #   rootPatterns = ["go.mod" ".git/"];
-            #   "trace.server" = "verbose";
-            #   filetypes = ["go"];
-            #};
-            nix = {
-              command = "rnix-lsp";
-              filetypes = [ "nix" ];
-            };
-            #rust = {
-            #  command = "rust-analyzer";
-            #  filetypes = ["nix"];
-            #};
+          shellAliases = {
+            ls = "${pkgs.coreutils}/bin/ls --color=auto";
+            la = "${pkgs.coreutils}/bin/ls -a --color=auto";
+            ll = "${pkgs.coreutils}/bin/ls -l -a --color=auto";
+            ds = "darwin-rebuild switch";
           };
         };
       };
-      viAlias = true;
-      vimAlias = true;
-      vimdiffAlias = true;
-      withNodeJs = true;
-      withPython3 = true;
-      withRuby = true;
+
+      programs.neovim = {
+        enable = true;
+        package = pkgs.neovim-nightly;
+        extraConfig = builtins.readFile (./config/nvim/init.vim);
+        plugins = with unstable.vimPlugins;
+          let
+            nvim-dap-go = pkgs.vimUtils.buildVimPlugin {
+              name = "nvim-dap-go";
+              src = pkgs.fetchFromGitHub {
+                owner = "leoluz";
+                repo = "nvim-dap-go";
+                rev = "c2902bb96c45e872d947d7e174775e652439add4";
+                sha256 = "sha256-N02snYCekDRv5+GB1ilTJuZfxzn5UheQtVFk4wjxjuc=";
+              };
+            };
+            smart-term-esc-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "smart-term-esc";
+              src = pkgs.fetchFromGitHub {
+                owner = "sychen52";
+                repo = "smart-term-esc.nvim";
+                rev = "168cd1a9e4649038e356b293005e5714e6e9f190";
+                sha256 = "sha256-/jce1Yyp1xfmy66Kv9dD+yJ+KPk+rs8YnO/TaluKv3k=";
+              };
+              buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+            };
+            telescope-live-grep-args-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "telescope-live-grep-args-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "nvim-telescope";
+                repo = "telescope-live-grep-args.nvim";
+                rev = "5a30d23a5b2a6c6a24da41cc7e21e4d68d0d1c6e";
+                sha256 = "sha256-DMHauDTEFLY1rh0GpWMCUGwI0TwgsmqKELUClauKc44=";
+              };
+              buildPhase = "echo build smart-term-esc.nvim"; # cannot be empty string
+            };
+            silicon-lua = pkgs.vimUtils.buildVimPlugin {
+              name = "silicon-lua";
+              src = pkgs.fetchFromGitHub {
+                owner = "narutoxy";
+                repo = "silicon.lua";
+                rev = "b17444e25f395fd7c7c712b46aa7977cc8433c84";
+                sha256 = "sha256-nFcCeXWHO6+YXfuUUXuxgjBHyYaPO0myj0fkeqyxPFA=";
+              };
+              buildPhase = "echo build smart-term-esc.nvim";
+            };
+            beacon-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "beacon-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "DanilaMihailov";
+                repo = "beacon.nvim";
+                rev = "a786c9a89b2c739c69f9500a2f70f2586c06ec27";
+                sha256 = "sha256-qD0dwccNjhJ7xyM+yG8bSFUyPn7hHZyC0RBy3MW1hz0=";
+              };
+              buildPhase = "echo build beacon.nvim";
+            };
+            mason-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "mason-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "williamboman";
+                repo = "mason.nvim";
+                rev = "311a14ffd7aa62561b73405c63478756c265585c";
+                sha256 = "sha256-lieBUJ7LF9vSV75K9L6Gsa/BZmdxXwqpCZI7zJz/XTY=";
+              };
+              buildPhase = "echo build mason-nvim";
+            };
+          in
+          [
+            which-key-nvim
+            editorconfig-vim
+            #gruvbox-community
+            #vim-elixi
+            vim-nix
+            beacon-nvim
+            {
+              plugin = silicon-lua;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/silicon.lua);
+            }
+
+            {
+              plugin = nui-nvim;
+              type = "lua";
+              config = ''
+            '';
+            }
+            {
+              plugin = noice-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/noice.lua);
+            }
+            {
+              plugin = nvim-navic;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
+            }
+
+
+            # vim-startify
+            {
+              plugin = alpha-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/alpha-nvim.lua);
+            }
+            {
+              plugin = nvim-web-devicons;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-web-devicons.lua);
+            }
+            #gitsigns-nvim
+            #nerdtree
+            nvim-tree-lua
+            {
+              plugin = nvim-tree-lua;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-tree-lua.lua);
+            }
+            fzf-vim
+            {
+              plugin = FTerm-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/fterm-nvim.lua);
+            }
+
+            {
+              plugin = indent-blankline-nvim;
+              type = "lua";
+              config = ''
+                require("indent_blankline").setup {
+                  -- for example, context is off by default, use this to turn it on
+                  show_current_context = true,
+                  show_current_context_start = true,
+                  show_current_context_end = true,
+                }
+              '';
+            }
+            {
+              plugin = smart-term-esc-nvim;
+              type = "lua";
+              config = ''
+                require('smart-term-esc').setup{ key='<Esc>', except={'nvim', 'fzf', 'lazygit', 'btop'} }
+              '';
+            }
+
+            {
+              plugin = aerial-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/aerial-nvim.lua);
+            }
+            aerial-nvim
+
+            {
+              plugin = plenary-nvim;
+            }
+
+            {
+              plugin = telescope-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/telescope.lua);
+            }
+            telescope-file-browser-nvim
+            telescope-project-nvim
+            telescope-fzf-native-nvim
+            telescope-coc-nvim
+            telescope-live-grep-args-nvim
+
+            {
+              plugin = lualine-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/lualine-nvim.lua);
+            }
+
+            {
+              plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
+            }
+            {
+              plugin = nvim-treesitter-context;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-treesitter-context.lua);
+            }
+
+            # cmp
+            {
+              plugin = nvim-cmp;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-cmp.lua);
+            }
+            # cmp sources
+            cmp-nvim-lsp
+            cmp-buffer
+            cmp-path
+            cmp-cmdline
+            # cmp-vsnip
+            # vim-vsnip # depends by cmp-vsnip
+            cmp-emoji
+            # snippets
+            cmp_luasnip
+            luasnip # depends by cmp_luasnip
+            friendly-snippets
+            lspkind-nvim
+            cmp-nvim-lsp-signature-help
+            cmp-treesitter
+
+            {
+              plugin = vim-fugitive;
+              type = "viml";
+              config = builtins.readFile (./config/nvim/plugins/vim-fugitive.vim);
+            }
+            vim-rhubarb
+
+            {
+              plugin = symbols-outline-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/symbols-outline-nvim.lua);
+            }
+
+            {
+              plugin = lsp_signature-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/lsp_signature-nvim.lua);
+            }
+
+            # lsp
+            {
+              plugin = nvim-lspconfig;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-lspconfig.lua);
+            }
+            {
+              plugin = mason-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
+            }
+
+            # copilot
+            copilot-vim
+            {
+              plugin = copilot-vim;
+              type = "viml";
+              config = ''
+                imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+                let g:copilot_no_tab_map = v:true
+              '';
+            }
+
+            {
+              plugin = nvim-autopairs;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-autopairs.lua);
+            }
+            {
+              plugin = comment-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/comment-nvim.lua);
+            }
+            {
+              plugin = auto-save-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/auto-save-nvim.lua);
+            }
+            {
+              plugin = leap-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/leap-nvim.lua);
+            }
+            {
+              plugin = vim-repeat;
+              type = "viml";
+              config = builtins.readFile (./config/nvim/plugins/vim-repeat.vim);
+            }
+
+            # theme
+            papercolor-theme
+            dracula-vim
+            palenight-vim
+            {
+              plugin = nvim-colorizer-lua;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-colorizer-lua.lua);
+            }
+            aurora
+            {
+              plugin = catppuccin-nvim;
+              type = "lua";
+              config = ''
+                vim.g.catppuccin_flavour = "frappe"; -- latte, frappe, macchiato, mocha
+                require("catppuccin").setup()
+                vim.api.nvim_command "colorscheme catppuccin"
+              '';
+            }
+            {
+              plugin = rose-pine;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/rose-pine.lua);
+            }
+            rose-pine
+          ]; # Only loaded if programs.neovim.extraConfig is set
+        coc = {
+          enable = false;
+          pluginConfig = builtins.readFile (./config/nvim/plugins/coc.vim);
+          settings = {
+            "suggest.noselect" = true;
+            "suggest.enablePreview" = true;
+            "suggest.enablePreselect" = false;
+            "suggest.disableKind" = true;
+            "go.goplsArgs" = [ "-remote=auto" "-logfile" "/tmp/gopls-coc-go.log" ];
+            "go.goplsPath" = "${pkgs.gopls}/bin/gopls";
+            "go.goplsOptions" = {
+              "local" = "github.com/erda-project/erda";
+            };
+            languageserver = {
+              #go = {
+              #   command = "gopls";
+              #   rootPatterns = ["go.mod" ".git/"];
+              #   "trace.server" = "verbose";
+              #   filetypes = ["go"];
+              #};
+              nix = {
+                command = "rnix-lsp";
+                filetypes = [ "nix" ];
+              };
+              #rust = {
+              #  command = "rust-analyzer";
+              #  filetypes = ["nix"];
+              #};
+            };
+          };
+        };
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
+        withNodeJs = true;
+        withPython3 = true;
+        withRuby = true;
+      };
+
+      #xdg.configFile."nvim/init.lua".text = builtins.readFile ./config/nvim/lua/init.lua;
     };
-
-    #xdg.configFile."nvim/init.lua".text = builtins.readFile ./config/nvim/lua/init.lua;
-
-  };
 }
 
 

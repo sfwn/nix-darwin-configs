@@ -54,16 +54,18 @@ nmap <leader>q :q<CR>
 nmap <leader>g :G<CR>
 
 " quickfix
-nnoremap cn :cnext<CR>
-nnoremap cp :cprev<CR>
-nnoremap co :copen<CR>
+nnoremap <silent> cn :cnext<CR>
+nnoremap <silent> cp :cprev<CR>
+nnoremap <silent> co :copen<CR>
 
 " complete
 " set completeopt=menu,menuone,noselect
-set completeopt=menu,menuone
+"set completeopt=menu,menuone
 
 " from coc
 set nobackup
 set nowritebackup
 set updatetime=300
 set signcolumn=yes
+
+inoremap <silent> <A-BS> <C-w>
