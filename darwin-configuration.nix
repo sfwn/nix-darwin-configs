@@ -524,6 +524,7 @@ in
                 vim.api.nvim_command "colorscheme catppuccin"
               '';
             }
+            zephyr-nvim
             {
               plugin = rose-pine;
               type = "lua";
