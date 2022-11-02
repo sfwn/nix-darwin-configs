@@ -69,3 +69,4 @@ set updatetime=300
 set signcolumn=yes
 
 inoremap <silent> <A-BS> <C-w>
+inoremap <silent> <S-Enter> <Esc>o
