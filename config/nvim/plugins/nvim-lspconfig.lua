@@ -72,8 +72,8 @@ require'lspconfig'.rnix.setup{
 local lua_pkg = mason_registry.get_package("lua-language-server")
 -- local sumneko_root_path = "/Users/sfwn/.local/share/nvim/mason/packages/lua-language-server/extension/server"
 -- concat string
-local sumneko_root_path = table.concat({lua_pkg:get_install_path(), "/extension/server"}, "/")
-local sumneko_binary = table.concat({lua_pkg:get_install_path(), "/extension/server/bin/lua-language-server"}, "/")
+local sumneko_root_path = table.concat({lua_pkg:get_install_path(), "extension/server"}, "/")
+local sumneko_binary = table.concat({lua_pkg:get_install_path(), "extension/server/bin/lua-language-server"}, "/")
 require'lspconfig'['sumneko_lua'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
