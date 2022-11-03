@@ -23,6 +23,12 @@ require('auto-save').setup({
 		end
 		return false -- can't save
 	end,
+        -- if buffer filetype in ignore_save_fts, return false, or true
+        local ignore_save_fts = { "help", "dap-repl" }
+        if not utils.not_in(vim.bo.filetype, ignore_save_fts) then
+            return false
+        end
+
     write_all_buffers = false, -- write all buffers when the current one meets `condition`
     debounce_delay = 3000, -- saves the file at most every `debounce_delay` milliseconds
 	callbacks = { -- functions to be executed at different intervals
