@@ -30,17 +30,6 @@ set splitright
 set splitbelow
 nmap <leader>t :vsplit term://zsh<CR>i
 
-""" go debug
-let g:go_debug_mappings = {
-    \ '(go-debug-continue)': {'key': 'F5', 'arguments': '<nowait>'},
-    \ '(go-debug-next)': {'key': 'F8', 'arguments': '<nowait>'},
-    \ '(go-debug-step)': {'key': 'F7'},
-    \ '(go-debug-print)': {'key': 'p'},
-\}
-map <leader>ds :GoDebugStart<cr>
-map <leader>dt :GoDebugStop<cr>
-map <leader>db :GoDebugBreakpoint<cr>
-
 """ fzf
 "nnoremap <Leader>fl :Lines<CR>
 "nnoremap <Leader>ff :Rg<CR>

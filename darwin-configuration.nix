@@ -11,6 +11,7 @@ in
   # $ nix-env -qaP | grep wget
   environment = {
     systemPackages = with pkgs; [
+      direnv
       hello
       neofetch
       inetutils
@@ -196,6 +197,7 @@ in
               eval \"$(jump shell)\"
               eval \"$(starship init zsh)\"
               eval \"$(brew shellenv)\"
+              eval \"$(direnv hook zsh)\"
             ";
 
           history = {
@@ -216,6 +218,7 @@ in
             NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
             PATH = "/run/current-system/sw/bin:$PATH:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin";
             PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
+            GOLANG_PROTOBUF_REGISTRATION_CONFLICT = "ignore";
           };
 
           oh-my-zsh = {
@@ -239,15 +242,6 @@ in
         extraConfig = builtins.readFile (./config/nvim/init.vim);
         plugins = with unstable.vimPlugins;
           let
-            nvim-dap-go = pkgs.vimUtils.buildVimPlugin {
-              name = "nvim-dap-go";
-              src = pkgs.fetchFromGitHub {
-                owner = "leoluz";
-                repo = "nvim-dap-go";
-                rev = "c2902bb96c45e872d947d7e174775e652439add4";
-                sha256 = "sha256-N02snYCekDRv5+GB1ilTJuZfxzn5UheQtVFk4wjxjuc=";
-              };
-            };
             smart-term-esc-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "smart-term-esc";
               src = pkgs.fetchFromGitHub {
@@ -297,6 +291,15 @@ in
                 sha256 = "sha256-lieBUJ7LF9vSV75K9L6Gsa/BZmdxXwqpCZI7zJz/XTY=";
               };
               buildPhase = "echo build mason-nvim";
+            };
+            nvim-dap-go = pkgs.vimUtils.buildVimPlugin {
+              name = "nvim-dap-go";
+              src = pkgs.fetchFromGitHub {
+                owner = "leoluz";
+                repo = "nvim-dap-go";
+                rev = "ce73cf9bce542e0731bb731690a8a72f03fe116b";
+                sha256 = "sha256-q4zVjY0QucyMObR1MDyioAtTwytNi7IkIGq96ukzw0g=";
+              };
             };
           in
           [
@@ -397,6 +400,7 @@ in
             telescope-fzf-native-nvim
             telescope-coc-nvim
             telescope-live-grep-args-nvim
+            telescope-dap-nvim
 
             {
               plugin = lualine-nvim;
@@ -436,6 +440,15 @@ in
             lspkind-nvim
             cmp-nvim-lsp-signature-help
             cmp-treesitter
+
+            # dap
+            {
+              plugin = nvim-dap;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-dap.lua);
+            }
+            nvim-dap-ui
+            nvim-dap-go
 
             {
               plugin = vim-fugitive;

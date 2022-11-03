@@ -85,6 +85,7 @@ vim.api.nvim_set_keymap( 'n', '<Space>p', ":lua require'telescope'.extensions.pr
 telescope.load_extension('fzf')
 telescope.load_extension('coc')
 telescope.load_extension('live_grep_args')
+telescope.load_extension('dap')
 
 local set_keymap = function(lhs, rhs)
   map('n', lhs, rhs, { noremap = true })
