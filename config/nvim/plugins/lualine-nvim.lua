@@ -42,13 +42,11 @@ local config = {
 }
 
 local navic = require('nvim-navic')
-local function navic_data()
-    if navic.is_available() then
-        return navic.get_location()
-    else
-        return "waiting"
-    end
-end
+
+local git_blame = require("gitblame")
+vim.g.gitblame_display_virtual_text = 0 -- Disable virtual text
+vim.g.gitblame_message_template = '<author>, <date> • <summary>'
+vim.g.gitblame_date_format = "%c"
 
 require('lualine').setup {
   options = {
@@ -71,10 +69,9 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics'},
-    --lualine_c = {'filename'},
-    lualine_c = {'filename', navic_data },
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_b = {'branch', 'diff', 'diagnostics', 'filetype'},
+    lualine_c = {'filename'},
+    lualine_x = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -89,7 +86,7 @@ require('lualine').setup {
   tabline = {},
   winbar = {
       -- lualine_c = { navic_data },
-      lualine_c = {},
+      lualine_c = { { navic.get_location } },
   },
   inactive_winbar = {},
   extensions = {}

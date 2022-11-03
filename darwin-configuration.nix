@@ -455,7 +455,15 @@ in
               type = "viml";
               config = builtins.readFile (./config/nvim/plugins/vim-fugitive.vim);
             }
-            vim-rhubarb
+            vim-rhubarb # :GBrowse
+            {
+              plugin = git-blame-nvim;
+              type = "viml";
+              config = ''
+                let g:gitblame_highlight_group = "Question"
+                noremap <silent> <space>gb :GBrowse<CR>
+              '';
+            }
 
             {
               plugin = symbols-outline-nvim;
