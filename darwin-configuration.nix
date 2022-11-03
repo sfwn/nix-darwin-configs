@@ -303,6 +303,12 @@ in
             };
           in
           [
+            nvim-surround
+            {
+              plugin = nvim-surround;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/nvim-surround.lua);
+            }
             which-key-nvim
             editorconfig-vim
             #gruvbox-community
