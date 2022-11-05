@@ -110,7 +110,6 @@ in
         rnix-lsp
         htop
         fortune
-        gitui
         git
         starship
         docker-client
@@ -350,7 +349,11 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-web-devicons.lua);
             }
-            #gitsigns-nvim
+            {
+              plugin = gitsigns-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/gitsigns-nvim.lua);
+            }
             #nerdtree
             nvim-tree-lua
             {
@@ -468,8 +471,11 @@ in
               plugin = git-blame-nvim;
               type = "viml";
               config = ''
-                let g:gitblame_highlight_group = "Question"
-                noremap <silent> <space>gb :GBrowse<CR>
+                let g:gitblame_highlight_group = "Comment"
+                autocmd VimEnter * GitBlameDisable
+                noremap <silent> <space>gt :GitBlameToggle<CR>
+                let g:gitblame_message_template = '      <author>, <date> • <summary>'
+                let g:gitblame_date_format = "%c"
               '';
             }
 

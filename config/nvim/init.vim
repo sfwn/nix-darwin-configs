@@ -59,3 +59,6 @@ set signcolumn=yes
 
 inoremap <silent> <A-BS> <C-w>
 inoremap <silent> <S-Enter> <Esc>o
+
+" 2 for git signs and diagnostics, 4 for breakpoint and others
+set signcolumn=auto:2-4
