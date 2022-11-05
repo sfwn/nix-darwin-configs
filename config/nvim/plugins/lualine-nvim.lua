@@ -1,79 +1,54 @@
-require('lualine').setup()
-
--- Color for highlights
-local colors = {
-  yellow = '#ECBE7B',
-  cyan = '#008080',
-  darkblue = '#081633',
-  green = '#98be65',
-  orange = '#FF8800',
-  violet = '#a9a1e1',
-  magenta = '#c678dd',
-  blue = '#51afef',
-  red = '#ec5f67'
-}
-
-local config = {
-  options = {
-    icons_enabled = true,
-    theme = 'gruvbox',
-    component_separators = {'', ''},
-    section_separators = {'', ''},
-    disabled_filetypes = {}
-  },
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'filename'},
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {'encoding', 'fileformat', 'filetype'},
-    lualine_z = {'branch'},
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  extensions = {}
-}
-
 local navic = require('nvim-navic')
+local navic_location = function ()
+    -- get current buffer filename
+    local filename = vim.fn.expand('%:t')
+    local has_lsp_attached = false
+    vim.lsp.for_each_buffer_client(0, function(client, _, _)
+        has_lsp_attached = true
+    end)
+    if not has_lsp_attached then
+        return ''
+    end
+    local location = navic.get_location()
+    if #location > 0 then
+        return string.format('%s > %s', filename, location)
+    else
+        return string.format('%s', filename)
+    end
 
-local git_blame = require("gitblame")
-vim.g.gitblame_display_virtual_text = 0 -- Disable virtual text
-vim.g.gitblame_message_template = '<author>, <date> • <summary>'
-vim.g.gitblame_date_format = "%c"
+end
 
 require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = 'auto',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' },
+    -- component_separators = { left = '', right = ''},
+    -- section_separators = { left = '', right = ''},
     disabled_filetypes = {
       statusline = {},
       winbar = {},
     },
     ignore_focus = {},
     always_divide_middle = true,
-    globalstatus = false,
+    globalstatus = true,
     refresh = {
-      statusline = 1000,
-      tabline = 1000,
-      winbar = 1000,
+      statusline = 100,
+      tabline = 100,
+      winbar = 100,
     }
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics', 'filetype'},
-    lualine_c = {'filename'},
-    lualine_x = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
-    lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_b = {},
+    lualine_c = {'progress', 'location', 'diagnostics'},
+    -- lualine_b = {'branch', 'diff', 'diagnostics', 'filename' },
+    -- lualine_c = { navic.get_location },
+    lualine_x = {'branch'},
+    -- lualine_y = { 'filetype', 'encoding', 'progress'},
+    lualine_y = {},
+    lualine_z = {'filename'}
   },
   inactive_sections = {
     lualine_a = {},
@@ -85,8 +60,7 @@ require('lualine').setup {
   },
   tabline = {},
   winbar = {
-      -- lualine_c = { navic_data },
-      lualine_c = { { navic.get_location } },
+      lualine_c = { { navic_location } },
   },
   inactive_winbar = {},
   extensions = {}
