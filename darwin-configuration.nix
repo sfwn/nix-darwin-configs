@@ -178,10 +178,10 @@ in
           df = "diff";
           dfs = "diff --staged";
         };
-      };
-
-      programs.gitui = {
-        enable = true;
+        extraConfig = {
+          commit.gpgsign = true;
+          gpg.format.program = "gpg";
+        };
       };
 
       programs = {
@@ -497,6 +497,7 @@ in
               config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
             }
             fidget-nvim
+
 
             # copilot
             copilot-vim
