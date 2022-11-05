@@ -31,9 +31,19 @@ local new_maker = function(filepath, bufnr, opts)
   end)
 end
 
+local trouble = require("trouble.providers.telescope")
+
 telescope.setup({
   defaults = {
     buffer_previewer_maker = new_maker,
+    mappings = {
+      i = {
+        ["<c-t>"] = trouble.open_with_trouble,
+      },
+      n = {
+        ["<c-t>"] = trouble.open_with_trouble,
+      },
+    },
   },
   extensions = {
   	file_browser = {
@@ -67,6 +77,8 @@ telescope.setup({
       mappings = { -- extend mappings
         i = {
           ["<C-k>"] = lga_actions.quote_prompt({ postfix = ' -t ' }),
+          ["<C-q>"] = lga_actions.open_quickfix,
+          ["<C-l>"] = lga_actions.open_loclist,
         },
       },
       -- ... also accepts theme settings, for example:

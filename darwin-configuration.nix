@@ -503,6 +503,11 @@ in
               config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
             }
             fidget-nvim
+            {
+              plugin = trouble-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/trouble-nvim.lua);
+            }
 
 
             # copilot
