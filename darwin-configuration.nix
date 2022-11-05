@@ -419,11 +419,13 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
             }
+            # tree-sitter plugins
             {
               plugin = nvim-treesitter-context;
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-treesitter-context.lua);
             }
+            nvim-ts-rainbow
 
             # cmp
             {
