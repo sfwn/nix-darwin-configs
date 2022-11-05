@@ -496,6 +496,7 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/mason-nvim.lua);
             }
+            fidget-nvim
 
             # copilot
             copilot-vim

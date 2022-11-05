@@ -1,6 +1,7 @@
 local navic = require("nvim-navic")
 local mason = require("mason")
 local mason_registry = require("mason-registry")
+require("fidget").setup() -- show lsp progress
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
