@@ -50,6 +50,7 @@ in
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  # see: https://nix-community.github.io/home-manager/index.html#sec-install-nix-darwin-module
   imports = [ <home-manager/nix-darwin> ];
 
   users.users.sfwn = {
@@ -124,6 +125,7 @@ in
         nodejs-16_x
         lazygit
         code-minimap
+        tree-sitter
         iosevka
       ];
 
@@ -419,7 +421,7 @@ in
             }
 
             {
-              plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
+              plugin = (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars));
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
             }
