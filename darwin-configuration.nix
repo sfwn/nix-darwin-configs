@@ -578,19 +578,10 @@ in
             {
               plugin = catppuccin-nvim;
               type = "lua";
-              config = ''
-                vim.g.catppuccin_flavour = "frappe"; -- latte, frappe, macchiato, mocha
-                require("catppuccin").setup()
-                vim.api.nvim_command "colorscheme catppuccin"
-              '';
-            }
-            zephyr-nvim
-            {
-              plugin = rose-pine;
-              type = "lua";
-              config = builtins.readFile (./config/nvim/plugins/rose-pine.lua);
-            }
-            rose-pine
+              config = builtins.readFile (./config/nvim/plugins/catppuccin-nvim.lua);
+           }
+           tokyonight-nvim
+           kanagawa-nvim
           ]; # Only loaded if programs.neovim.extraConfig is set
         coc = {
           enable = false;
