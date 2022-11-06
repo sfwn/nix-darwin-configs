@@ -124,6 +124,7 @@ in
         nodejs-16_x
         lazygit
         code-minimap
+        iosevka
       ];
 
       programs.fzf = {
