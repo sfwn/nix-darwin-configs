@@ -302,6 +302,16 @@ in
                 rev = "ce73cf9bce542e0731bb731690a8a72f03fe116b";
                 sha256 = "sha256-q4zVjY0QucyMObR1MDyioAtTwytNi7IkIGq96ukzw0g=";
               };
+            femaco-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "femaco-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "AckslD";
+                repo = "nvim-FeMaco.lua";
+                rev = "469465fc1adf8bddc2c9bbe549d38304de95e9f7";
+                sha256 = "sha256-fayT1gtbxO0B3qK3pISsgarFVL9Kt/NWOyI26+S9Y+c=";
+              };
+              buildPhase = "echo build femaco-nvim";
+            };
             lspsaga-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "lspsaga-nvim";
               src = pkgs.fetchFromGitHub {
@@ -314,6 +324,11 @@ in
             };
           in
           [
+            {
+              plugin = femaco-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/femaco-nvim.lua);
+            }
             nvim-surround
             {
               plugin = nvim-surround;
