@@ -302,6 +302,15 @@ in
                 rev = "ce73cf9bce542e0731bb731690a8a72f03fe116b";
                 sha256 = "sha256-q4zVjY0QucyMObR1MDyioAtTwytNi7IkIGq96ukzw0g=";
               };
+            lspsaga-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "lspsaga-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "glepnir";
+                repo = "lspsaga.nvim";
+                rev = "361e1ad5554ceaa6b1f462125a6a2442cc115f2d";
+                sha256 = "sha256-QXMwIwdtpyh/1YqcGZkXw1JGv0LEUrzd3XUiHA4xqvw=";
+              };
+              buildPhase = "echo build lspsaga.nvim";
             };
           in
           [
@@ -333,11 +342,6 @@ in
               plugin = noice-nvim;
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/noice.lua);
-            }
-            {
-              plugin = nvim-navic;
-              type = "lua";
-              config = builtins.readFile (./config/nvim/plugins/nvim-navic.lua);
             }
 
 
@@ -510,6 +514,11 @@ in
               plugin = trouble-nvim;
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/trouble-nvim.lua);
+            }
+            {
+              plugin = lspsaga-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/lspsaga-nvim.lua);
             }
 
 
