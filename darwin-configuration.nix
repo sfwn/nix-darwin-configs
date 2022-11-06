@@ -550,6 +550,12 @@ in
               config = builtins.readFile (./config/nvim/plugins/vim-repeat.vim);
             }
 
+            {
+              plugin = barbar-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/barbar-nvim.lua);
+            }
+
             # theme
             papercolor-theme
             dracula-vim
