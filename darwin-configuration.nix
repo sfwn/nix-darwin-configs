@@ -105,7 +105,7 @@ in
       home.stateVersion = "22.05";
 
       home.packages = with pkgs; [
-        httpie
+        # httpie
         go_1_19
         gopls
         rnix-lsp
@@ -302,6 +302,8 @@ in
                 rev = "ce73cf9bce542e0731bb731690a8a72f03fe116b";
                 sha256 = "sha256-q4zVjY0QucyMObR1MDyioAtTwytNi7IkIGq96ukzw0g=";
               };
+              buildPhase = "echo build nvim-dap-go";
+            };
             femaco-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "femaco-nvim";
               src = pkgs.fetchFromGitHub {
@@ -336,7 +338,7 @@ in
               config = builtins.readFile (./config/nvim/plugins/nvim-surround.lua);
             }
             which-key-nvim
-            editorconfig-vim
+            editorconfig-nvim
             #gruvbox-community
             #vim-elixi
             vim-nix
@@ -351,14 +353,8 @@ in
               plugin = nui-nvim;
               type = "lua";
               config = ''
-            '';
+              '';
             }
-            {
-              plugin = noice-nvim;
-              type = "lua";
-              config = builtins.readFile (./config/nvim/plugins/noice.lua);
-            }
-
 
             # vim-startify
             {
@@ -594,9 +590,9 @@ in
               plugin = catppuccin-nvim;
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/catppuccin-nvim.lua);
-           }
-           tokyonight-nvim
-           kanagawa-nvim
+            }
+            tokyonight-nvim
+            kanagawa-nvim
           ]; # Only loaded if programs.neovim.extraConfig is set
         coc = {
           enable = false;

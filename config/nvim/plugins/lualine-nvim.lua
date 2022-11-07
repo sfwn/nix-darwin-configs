@@ -1,10 +1,10 @@
 local lualine = require('lualine')
 
-lualine.setup{
+lualine.setup {
     options = {
         icons_enabled = true,
-        -- theme = 'auto',
-        theme = 'catppuccin',
+        theme = 'auto',
+        -- theme = 'catppuccin',
         section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
         -- component_separators = { left = '', right = ''},
@@ -14,7 +14,7 @@ lualine.setup{
             winbar = {},
         },
         ignore_focus = {},
-       always_divide_middle = true,
+        always_divide_middle = true,
         globalstatus = true,
         refresh = {
             statusline = 100,
@@ -22,16 +22,20 @@ lualine.setup{
             winbar = 100,
         }
     },
-   sections = {
+    sections = {
         lualine_a = { 'mode' },
         lualine_b = {},
-        lualine_c = { 'progress', 'location', 'diagnostics' },
-        -- lualine_b = {'branch', 'diff', 'diagnostics', 'filename' },
-        -- lualine_c = { navic.get_location },
-        lualine_x = { 'diff', 'branch' },
-        -- lualine_y = { 'filetype', 'encoding', 'progress'},
-        lualine_y = {},
-        lualine_z = { 'filename' }
+        lualine_c = { 'progress', 'location', '%=', 'diagnostics', 'diff' },
+        lualine_x = { 'branch' },
+        lualine_y = { 'filetype' },
+        lualine_z = {
+            {
+                'filename',
+                file_status = true,
+                newfile_status = true,
+                path = 0,
+            },
+        }
     },
     inactive_sections = {
         lualine_a = {},
@@ -42,9 +46,7 @@ lualine.setup{
         lualine_z = {}
     },
     tabline = {},
-    winbar = {
-        -- lualine_c = { { navic_location } },
-    },
+    winbar = {},
     inactive_winbar = {},
     extensions = {}
 }

@@ -48,7 +48,7 @@ cmp.setup({
     },
     window = {
         -- completion = cmp.config.window.bordered(),
-        -- documentation = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
     },
     mapping = my_mapping,
     sources = cmp.config.sources({
@@ -70,6 +70,19 @@ cmp.setup({
     },
     formatting = {
         format = function(entry, vim_item)
+            vim_item.menu = ({
+                nvim_lsp = "[LSP]",
+                treesitter = "[TS]",
+                buffer = "[BUF]",
+                luasnip = "[SNIP]",
+                nvim_lua = "[LUA]",
+                emoji = "[EMOJI]",
+                path = "[PATH]",
+                calc = "[CALC]",
+                spell = "[SPELL]",
+                tags = "[TAGS]",
+                nvim_lsp_signature_help = "[LSP_SIG]",
+            })[entry.source.name]
             if vim.tbl_contains({ 'path' }, entry.source.name) then
                 local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
                 if icon then

@@ -19,7 +19,7 @@ require("catppuccin").setup({
         which_key = true,
         lsp_saga = true,
         navic = {
-            enabled = true,
+            enabled = false,
             custom_bg = "NONE",
         },
         indent_blankline = {
@@ -64,9 +64,6 @@ local sign = vim.fn.sign_define
 sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
 sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
 sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
-
--- navic
-require("nvim-navic").highlight = true
 
 -- setup
 vim.api.nvim_command "colorscheme catppuccin"

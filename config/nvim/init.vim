@@ -6,8 +6,8 @@ set termguicolors
 let g:ctrlp_map = '<c-p>'
 "set showtabline=2
 "colorscheme PaperColor
-colorscheme dracula
-set background=light
+"colorscheme dracula
+"set background=light
 set ignorecase
 
 " tab
