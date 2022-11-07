@@ -37,6 +37,10 @@ nmap <leader>t :vsplit term://zsh<CR>i
 
 " copy to system clipboard
 vmap <C-c> "+y
+vmap <D-c> "+y
+map <D-v> "+p<CR>
+map! <D-v> <C-R>+
+tmap <D-v> <C-R>+
 
 " quick exit
 nmap <leader>q :q<CR>
