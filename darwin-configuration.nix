@@ -361,7 +361,11 @@ in
               config = builtins.readFile (./config/nvim/plugins/which-key-nvim.lua);
             }
             which-key-nvim
-            editorconfig-nvim
+            {
+              plugin = editorconfig-vim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/editorconfig-vim.lua);
+            }
             #gruvbox-community
             #vim-elixi
             vim-nix
