@@ -602,37 +602,6 @@ in
             tokyonight-nvim
             kanagawa-nvim
           ]; # Only loaded if programs.neovim.extraConfig is set
-        coc = {
-          enable = false;
-          pluginConfig = builtins.readFile (./config/nvim/plugins/coc.vim);
-          settings = {
-            "suggest.noselect" = true;
-            "suggest.enablePreview" = true;
-            "suggest.enablePreselect" = false;
-            "suggest.disableKind" = true;
-            "go.goplsArgs" = [ "-remote=auto" "-logfile" "/tmp/gopls-coc-go.log" ];
-            "go.goplsPath" = "${pkgs.gopls}/bin/gopls";
-            "go.goplsOptions" = {
-              "local" = "github.com/erda-project/erda";
-            };
-            languageserver = {
-              #go = {
-              #   command = "gopls";
-              #   rootPatterns = ["go.mod" ".git/"];
-              #   "trace.server" = "verbose";
-              #   filetypes = ["go"];
-              #};
-              nix = {
-                command = "rnix-lsp";
-                filetypes = [ "nix" ];
-              };
-              #rust = {
-              #  command = "rust-analyzer";
-              #  filetypes = ["nix"];
-              #};
-            };
-          };
-        };
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
