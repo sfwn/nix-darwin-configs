@@ -98,6 +98,7 @@ telescope.load_extension('fzf')
 telescope.load_extension('coc')
 telescope.load_extension('live_grep_args')
 telescope.load_extension('dap')
+telescope.load_extension('refactoring')
 
 local set_keymap = function(lhs, rhs)
   map('n', lhs, rhs, { noremap = true })

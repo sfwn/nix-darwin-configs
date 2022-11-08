@@ -332,6 +332,16 @@ in
               };
               buildPhase = "echo build lspsaga.nvim";
             };
+            refactoring-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "refactoring-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "theprimeagen";
+                repo = "refactoring.nvim";
+                rev = "c9ca8e3bbf7218101f16e6a03b15bf72b99b2cae";
+                sha256 = "sha256-eh3rs004NFggOugjvhhFS+5NHhE85rZDU3QKFcsQZ4E=";
+              };
+              buildPhase = "echo build refactoring.nvim";
+            };
           in
           [
             {
@@ -538,6 +548,11 @@ in
               plugin = lspsaga-nvim;
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/lspsaga-nvim.lua);
+            }
+            {
+              plugin = refactoring-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/refactoring-nvim.lua);
             }
 
 
