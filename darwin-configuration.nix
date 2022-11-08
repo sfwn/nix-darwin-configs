@@ -355,6 +355,11 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-surround.lua);
             }
+            {
+              plugin = which-key-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/which-key-nvim.lua);
+            }
             which-key-nvim
             editorconfig-nvim
             #gruvbox-community
