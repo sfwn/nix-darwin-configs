@@ -33,9 +33,18 @@ in
       jump
       starship
     ];
+    shells = [
+      pkgs.zsh
+      pkgs.bashInteractive
+    ];
+  };
+
+  programs.zsh = {
+    enable = true;
     variables = {
       EDITOR = "vim";
       LANG = "en_US.UTF-8";
+      PATH = "/run/current-system/sw/bin:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin:$PATH";
     };
   };
 
@@ -102,7 +111,7 @@ in
       programs.home-manager.enable = true;
       programs.bash.enable = true;
 
-      home.stateVersion = "22.05";
+      home.stateVersion = "22.11";
 
       home.packages = with pkgs; [
         # httpie
@@ -218,7 +227,6 @@ in
             GIT_EDITOR = EDITOR;
             GOPATH = "$HOME/go";
             NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
-            PATH = "/run/current-system/sw/bin:$PATH:$GOPATH/bin:/usr/local/bin:/opt/homebrew/bin";
             PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
             GOLANG_PROTOBUF_REGISTRATION_CONFLICT = "ignore";
           };
