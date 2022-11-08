@@ -390,6 +390,11 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/gitsigns-nvim.lua);
             }
+            {
+              plugin = git-messenger-vim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/git-messenger-vim.lua);
+            }
             #nerdtree
             nvim-tree-lua
             {
