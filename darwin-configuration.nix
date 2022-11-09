@@ -5,6 +5,7 @@ let
       allowUnfree = true;
     };
   };
+  head_colima = pkgs.callPackage ./config/nix/colima.nix { };
 in
 {
   # List packages installed in system profile. To search by name, run:
@@ -127,7 +128,7 @@ in
         tailscale
         pkg-config
         libgit2_1_3_0
-        colima
+        head_colima
         pstree
         rust-analyzer
         cargo
