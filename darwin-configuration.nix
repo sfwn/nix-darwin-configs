@@ -1,10 +1,5 @@
 { config, pkgs, ... }:
 let
-  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {
-    config = {
-      allowUnfree = true;
-    };
-  };
   head_colima = pkgs.callPackage ./config/nix/colima.nix { };
 in
 {
@@ -93,13 +88,6 @@ in
   };
 
   home-manager.users.sfwn = { config, pkgs, ... }:
-    let
-      unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {
-        config = {
-          allowUnfree = true;
-        };
-      };
-    in
     {
 
       nixpkgs.overlays = [
@@ -251,7 +239,7 @@ in
         enable = true;
         package = pkgs.neovim-nightly;
         extraConfig = builtins.readFile (./config/nvim/init.vim);
-        plugins = with unstable.vimPlugins;
+        plugins = with pkgs.vimPlugins;
           let
             smart-term-esc-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "smart-term-esc";
@@ -643,5 +631,3 @@ in
       #xdg.configFile."nvim/init.lua".text = builtins.readFile ./config/nvim/lua/init.lua;
     };
 }
-
-
