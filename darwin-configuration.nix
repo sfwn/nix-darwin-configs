@@ -217,7 +217,7 @@ in
             GOPATH = "$HOME/go";
             NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
             PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
-            GOLANG_PROTOBUF_REGISTRATION_CONFLICT = "ignore";
+            #GOLANG_PROTOBUF_REGISTRATION_CONFLICT = "ignore";
           };
 
           oh-my-zsh = {
@@ -333,6 +333,12 @@ in
             };
           in
           [
+            {
+              plugin = direnv-vim;
+              type = "viml";
+              config = ''
+                  '';
+            }
             {
               plugin = femaco-nvim;
               type = "lua";
