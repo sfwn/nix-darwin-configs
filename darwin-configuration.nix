@@ -117,6 +117,9 @@ in
         pkg-config
         libgit2_1_3_0
         head_colima
+        docker-compose
+        kind
+        kubernetes-helm
         pstree
         rust-analyzer
         cargo
