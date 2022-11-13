@@ -566,6 +566,11 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/refactoring-nvim.lua);
             }
+            {
+              plugin = null-ls-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/null-ls-nvim.lua);
+            }
 
 
             # copilot
