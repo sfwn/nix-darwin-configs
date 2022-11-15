@@ -437,13 +437,6 @@ in
             }
 
             {
-              plugin = aerial-nvim;
-              type = "lua";
-              config = builtins.readFile (./config/nvim/plugins/aerial-nvim.lua);
-            }
-            aerial-nvim
-
-            {
               plugin = plenary-nvim;
             }
 
