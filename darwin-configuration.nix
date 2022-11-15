@@ -466,7 +466,7 @@ in
             }
 
             {
-              plugin = (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars));
+              plugin = (nvim-treesitter.withPlugins (p: with p; [ dockerfile make bash go lua rust ]));
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
             }
