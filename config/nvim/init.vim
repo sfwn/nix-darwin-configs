@@ -66,3 +66,8 @@ inoremap <silent> <S-Enter> <Esc>o
 
 " 2 for git signs and diagnostics, 4 for breakpoint and others
 set signcolumn=auto:3-5
+
+set foldmethod=indent
+set foldminlines=0
+set nofoldenable
+set foldlevel=99

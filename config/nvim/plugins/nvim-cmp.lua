@@ -147,3 +147,6 @@ require('lspconfig')['rnix'].setup {
 require('lspconfig')['vimls'].setup {
     capabilities = capabilities
 }
+require('lspconfig')['dockerls'].setup {
+    capabilities = capabilities
+}

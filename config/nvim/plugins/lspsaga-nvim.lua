@@ -10,7 +10,7 @@ local setup = {
     },
     max_preview_lines = 10,
     finder_action_keys = {
-        open = "o",
+        open = {"o", '<cr>'},
         vsplit = "s",
         split = "i",
         tabe = "t",
@@ -19,7 +19,7 @@ local setup = {
         scroll_up = "<C-b>",
     },
     code_action_keys = {
-        quit = "q",
+        quit = {"q", "<esc>"},
         exec = "<CR>",
     },
     rename_action_quit = "<C-c>",
