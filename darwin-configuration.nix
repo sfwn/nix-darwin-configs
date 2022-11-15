@@ -334,6 +334,16 @@ in
               };
               buildPhase = "echo build refactoring.nvim";
             };
+            styler-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "styler-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "folke";
+                repo = "styler.nvim";
+                rev = "1454784d20f183e1791f14be5f3bfcce38285170";
+                sha256 = "sha256-WrVXz6UqmBWv78v4ADsDLhs9RIOKig/Hg3ZHluVEN3s=";
+              };
+              buildPhase = "echo build styler.nvim";
+            };
           in
           [
             {
@@ -626,6 +636,19 @@ in
             }
             tokyonight-nvim
             kanagawa-nvim
+            {
+              plugin = styler-nvim;
+              type = "lua";
+              config = ''
+                require("styler").setup({
+                  themes = {
+                    markdown = { colorscheme = "kanagawa", background = "dark" },
+                    help = { colorscheme = "catppuccin-mocha", background = "dark" },
+                    go = { colorscheme = "catppuccin-frappe", background = "dark" },
+                  },
+                })
+              '';
+            }
           ]; # Only loaded if programs.neovim.extraConfig is set
         viAlias = true;
         vimAlias = true;
