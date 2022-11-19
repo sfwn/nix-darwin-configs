@@ -414,6 +414,11 @@ in
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/git-messenger-vim.lua);
             }
+            {
+              plugin = diffview-nvim;
+              type = "lua";
+              config = builtins.readFile (./config/nvim/plugins/diffview-nvim.lua);
+            }
             #nerdtree
             nvim-tree-lua
             {
