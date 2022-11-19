@@ -25,6 +25,8 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
+dap.set_log_level('TRACE')
+
 -- nvim-dap
 -- Caveats: Goto insert mode and hit Ctrl-V Shift-F#, which gotted we can use that to map.
 vim.keymap.set('n', '<f3>', dap.toggle_breakpoint, { noremap = true, silent = true })
