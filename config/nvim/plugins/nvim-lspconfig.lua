@@ -105,3 +105,5 @@ require'lspconfig'['sumneko_lua'].setup{
         },
     },
 }
+
+vim.diagnostic.config({virtual_text = false})
