@@ -25,8 +25,8 @@ lualine.setup {
     sections = {
         lualine_a = { 'mode' },
         lualine_b = {},
-        lualine_c = { 'progress', 'location', '%=', 'diagnostics', 'diff' },
-        lualine_x = { 'branch' },
+        lualine_c = { 'progress', 'location', '%=', 'diagnostics' },
+        lualine_x = { 'branch', 'diff' },
         lualine_y = { 'filetype' },
         lualine_z = {
             {
