@@ -476,7 +476,7 @@ in
             }
 
             {
-              plugin = (nvim-treesitter.withPlugins (p: with p; [ dockerfile make bash go lua rust nix yaml json vim ]));
+              plugin = (nvim-treesitter.withPlugins (p: with p; [ dockerfile make bash go gomod lua rust nix yaml json vim ]));
               type = "lua";
               config = builtins.readFile (./config/nvim/plugins/nvim-treesitter.lua);
             }
