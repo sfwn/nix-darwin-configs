@@ -44,6 +44,16 @@ telescope.setup({
         ["<c-t>"] = trouble.open_with_trouble,
       },
     },
+    vimgrep_arguments = {
+      'rg',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case',
+      '-uu',
+      -- '-F',
+    },
   },
   extensions = {
   	file_browser = {
