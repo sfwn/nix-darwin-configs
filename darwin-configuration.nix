@@ -7,6 +7,8 @@ in
   # $ nix-env -qaP | grep wget
   environment = {
     systemPackages = with pkgs; [
+      delve
+      rdkafka
       direnv
       hello
       neofetch
@@ -219,7 +221,7 @@ in
             GIT_EDITOR = EDITOR;
             GOPATH = "$HOME/go";
             NIX_PATH = "$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix";
-            PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig";
+            PKG_CONFIG_PATH = "${pkgs.libgit2_1_3_0}/lib/pkgconfig:${pkgs.rdkafka}/lib/pkgconfig";
             #GOLANG_PROTOBUF_REGISTRATION_CONFLICT = "ignore";
           };
 
