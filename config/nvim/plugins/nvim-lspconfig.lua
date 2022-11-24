@@ -1,3 +1,4 @@
+local util = require('lspconfig/util')
 local mason = require("mason")
 local mason_registry = require("mason-registry")
 require("fidget").setup() -- show lsp progress
@@ -44,9 +45,27 @@ local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
 }
+
+local lastRootPath = nil
+local gomodpath = vim.trim(vim.fn.system("go env GOPATH")) .. "/pkg/mod"
 require('lspconfig')['gopls'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
+    root_dir = function(fname)
+        local fullpath = vim.fn.expand(fname, ":p")
+        -- vim.pretty_print(fullpath)
+        -- vim.pretty_print(string.format(fullpath, "erda-project/erda/api/proto-go/", 1, true))
+        if (string.find(fullpath, gomodpath) or string.find(fullpath, "erda-project/erda/api/proto-go/", 1, true)) and lastRootPath ~= nil then
+            -- vim.pretty_print("found it, use last_root_path" .. lastRootPath)
+            -- vim.pretty_print("last_root_path: " .. lastRootPath)
+            return lastRootPath
+        end
+        local root = util.root_pattern("go.mod", ".git")(fname)
+        if root ~= nil then
+            lastRootPath = root
+        end
+        return root
+    end,
 }
 require('lspconfig')['rust_analyzer'].setup{
     on_attach = on_attach,
