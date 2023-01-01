@@ -30,6 +30,8 @@ in
       kubectl
       jump
       starship
+      iperf3
+      graphviz
     ];
     shells = [
       pkgs.zsh
@@ -124,7 +126,7 @@ in
         kubernetes-helm
         pstree
         rust-analyzer
-        cargo
+        rustup
         nodejs-16_x
         lazygit
         code-minimap
